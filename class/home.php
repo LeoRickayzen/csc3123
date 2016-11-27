@@ -25,7 +25,23 @@
  */
         public function handle($context)
         {
-            return 'index.twig';
+        	$user = $context->user();
+        	if($user != NULL){
+        		if($user->isstudent())
+	        	{
+	        		return 'studentIndex.twig';
+	        	}
+	        	if($user->isdeveloper() || $user->isadmin())
+	        	{
+	        		return 'index.twig';
+	        	}
+	        	if($user->isTL())
+	        	{
+	        		return 'tlIndex.twig';
+	        	}
+        	}else{
+        		return 'login.twig';
+        	}
         }
     }
 ?>
