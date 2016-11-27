@@ -150,6 +150,33 @@
             return is_object($this->hasrole('Site', 'Developer'));
         }
 /**
+ * Is this user a student?
+ *
+ * @return boolean
+ */
+        public function isstudent()
+        {
+            return is_object($this->hasrole('project', 'Student'));
+        }
+/**
+ * Is this user a module leader??
+ *
+ * @return boolean
+ */
+        public function isTL()
+        {
+            return is_object($this->hasrole('project', 'ThemeLeader'));
+        } 
+/**
+ * Is this user a supervisor?
+ *
+ * @return boolean
+ */
+        public function isSupervisor()
+        {
+            return is_object($this->hasrole('project', 'Supervisor'));
+        }         
+/**
  * Set the user's password
  *
  * @param string	$pw	The password
