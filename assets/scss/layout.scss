@@ -1,0 +1,25 @@
+
+$font-stack:    sans-serif;
+$bg-color: #fff;
+
+body {
+  font-family: $font-stack;
+  background-color: $bg-color;
+}
+
+/*------------------------------------*\
+    For the /admin pages
+\*------------------------------------*/
+
+/**
+ * Used for delete buttons
+ */
+.delb {
+    color: red;
+}
+
+.actb, .admb, .editb, .delb, .devb, .reqb, .rdob, .disb {
+    cursor: pointer;
+}
+
+.noconfirm { color: red; }
