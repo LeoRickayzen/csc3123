@@ -31,15 +31,17 @@
 	        	{
 	        		return 'studentIndex.twig';
 	        	}
-	        	if($user->isdeveloper() || $user->isadmin())
-	        	{
-	        		return 'index.twig';
-	        	}
 	        	if($user->isTL())
 	        	{
 	        		return 'tlIndex.twig';
 	        	}
-        	}else{
+	        	if($user->isdeveloper() || $user->isadmin())
+	        	{
+	        		return 'index.twig';
+	        	}
+        	}
+        	else
+        	{
         		return 'login.twig';
         	}
         }
