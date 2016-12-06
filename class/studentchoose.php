@@ -18,27 +18,31 @@
  *
  * @return string	A template name
  */
+
         public function handle($context)
         {
 
             $topics = array("");
 
-            $topicLinks = array("");
+            $topicLinks = array("all, ");
 
             $rest = $context->rest();
 
             $path = $rest[0];
 
-            if ($rest[0] == 'area'){
-
-            }
-            if ($rest[0] == 'topics' & rest[2] == 'area'){
-                for($i = 0; $i < $topics.length(); $i++){
-
+            if ($rest[1] == 'area')
+            {
+                if($rest[0] == 'all')
+                {
+                    return 'test1.twg';
+                }
+                else
+                {
+                    return 'test2.twg';
                 }
             }
 
-        	return 'something.twig'
+        	return 'test3.twig'
             }
         }
     }
