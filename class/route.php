@@ -44,7 +44,7 @@
             }
         }
 
-        private function routeBuilder($rest){
+        public static function routeBuilder($rest){
             $path = "";
             for($i = 0; $i < sizeof($rest); $i = $i + 1){
                 if($i == sizeof($rest)-1){

@@ -28,21 +28,26 @@
 
             $rest = $context->rest();
 
-            $path = $this->routeBuilder($rest);
+            $path = Route::routeBuilder($rest);
 
-            $areaRoute = new Route('area', 'GET');
-            $areaSpecificRoute = new Route('area/', 'GET');
+            $themeRoute = new Route('theme', 'GET');
+            $themeSpecificRoute = new Route('theme/', 'GET');
+            $themePostRoute = new Route('theme', 'POST');
             $topicChoiceRoute = new Route('topic', 'POST');
             $topicSpecificRoute = new Route('topic/', 'GET');
 
             //get all the areas
-            if($areaRoute->isEqual($context->rest(), $_SERVER)){
-                return "test1.twig";
+            if($themeRoute->isEqual($context->rest(), $_SERVER)){
+                return getThemes($context);
             }
 
-            if($areaSpecificRoute->isEqual($context->rest(), $_SERVER)){
+            if($themePostRoute->isEqual($context->rest(), $_SERVER)){
+                $this->postTheme($context);
+                return "test3.twig";
+            }
+
+            if($themeSpecificRoute->isEqual($context->rest(), $_SERVER)){
                 $area = substr($path, 7, sizeof($path));
-                return "test2.twig";
                 //return twig with topics within that specific area
             }
 
@@ -54,7 +59,6 @@
             }
             
             if($topicSpecificRoute->isEqual($context->rest(), $_SERVER)){
-                return "test3.twig";
                 $topic = substr($path, 7, sizeof($path));
                 //return twig about specific topic
             }
@@ -62,38 +66,25 @@
 
         }
 
-        public function routeBuilder($rest){
-            $path = "";
-            for($i = 0; $i < sizeof($rest); $i = $i + 1){
-                if($i == sizeof($rest)-1){
-                    $path = $path . $rest[$i];
-                }else{    
-                    $path = $path . $rest[$i] . '/';
-                }
-            }
-            return $path;
+        public function getThemes($context){
+            $themes = R::findAll("theme");
+
+            $context->local()->addval('themes', $themes);
+
+            return 'themes.twig';
         }
 
-        public function requestType(){
-            $methods = array('GET', 'PUT', 'POST', 'DELETE');
-
-            for($i = 0; $i < sizeof($methods); $i++){
-                if($_SERVER['REQUEST_METHOD'] === $methods[$i]){
-                    return $methods[$i];
-                }
-            }
+        public function postTheme($context){
+            $fdt = $context->formdata();
+            
+            $name = $fdt->mustpost('name');
+            
+            $theme = R::dispense('theme');
+            $theme->name = $name;
+            $theme->leader = $context->user();
+            
+            $id = R::store($theme);
         }
 
-        public function area(){
-
-        }
-
-        public function areaAll(){
-
-        }
-
-        public function areaModule(){
-
-        }
     }
 ?>

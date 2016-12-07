@@ -23,6 +23,7 @@
  *
  * @return string	A template name
  */
+
         public function handle($context)
         {
         	$user = $context->user();
