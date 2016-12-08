@@ -1,0 +1,3 @@
+-change the rest route for project get to use id and not name
+-add check to whether the topic owner being added is actually a supervisor
+-add server side form validation
