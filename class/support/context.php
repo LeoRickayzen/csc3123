@@ -123,6 +123,33 @@
             return $this->hasuser() && $this->user()->isadmin();
         }
 /**
+ * Do we have a logged in theme leader user?
+ *
+ * @return boolean
+ */
+        public function hasTL()
+        {
+            return $this->hasuser() && $this->user()->isTL();
+        }
+/**
+ * Do we have a logged in supervisor user?
+ *
+ * @return boolean
+ */
+        public function hasSupervisor()
+        {
+            return $this->hasuser() && $this->user()->isSupervisor();
+        }
+/**
+ * Do we have a logged in student user?
+ *
+ * @return boolean
+ */
+        public function isStudent()
+        {
+            return $this->hasuser() && $this->user()->isStudent();
+        }
+/**
  * Do we have a logged in developer user?
  *
  * @return boolean

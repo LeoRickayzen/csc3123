@@ -38,7 +38,7 @@
 
             //get all the areas
             if($themeRoute->isEqual($context->rest(), $_SERVER)){
-                return getThemes($context);
+                return $this->getThemes($context);
             }
 
             if($themePostRoute->isEqual($context->rest(), $_SERVER)){
@@ -53,7 +53,8 @@
 
             //if route is /topic and it's post, set the topic choice for the user
             if($topicChoiceRoute->isEqual($context->rest(), $_SERVER)){
-                $topicSelection = $_POST['topic'];
+                $this->postTopic($context);
+                return "oops.twig";
                 //add the students topic choice
                 //redirect
             }
@@ -74,7 +75,42 @@
             return 'themes.twig';
         }
 
+        public function postTopic($context){
+            if($context->hasTL() || $context->hasSupervisor() ||$context->hasAdmin()){
+                $fdt = $context->formdata();
+                
+                $topic = R::dispense('topic');
+
+                $topic->title = $fdt->mustpost('title');
+                $topic->description = $fdt->mustpost('description');
+                if($context->hasSupervisor()){
+                    $topic->supervisor = $context->user();
+                }else{
+                    $topic->supervisor = R::findOne("user", "id = '" . $fdt->mustpost('supervisorid') . "'");
+                }
+                $topic->theme[] = R::findOne("theme", "id = '" . $fdt->mustpost('themeid') . "'");
+
+                R::store($topic);
+            }
+            if($context->hasStudent()){
+                $fdt = $context->formdata();
+
+                $topic = R::findOne('topic', "id ='" . $fdt->mustpost('topicid') . "'");
+
+                $topic->students[] = $context->user();
+
+                R::store($topic)
+            }
+        }
+
         public function postTheme($context){
+
+            if($context->hasTL()){
+
+            }else{
+
+            }
+
             $fdt = $context->formdata();
             
             $name = $fdt->mustpost('name');
