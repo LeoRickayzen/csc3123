@@ -8,13 +8,11 @@
 
 {% block main %}
     <section class="row">
-        <form action="{{base}}/choose/theme" method="post">
-        {% for theme in themes %}
-            <div class = "well">
-                <h2>{{theme.name}}</h2>
-                <button type="submit" class="btn btn-primary" type="submit" name="theme" value = "{{theme.name}}">Select</button>
-            </div>
-        {% endfor %}
-        </form>
+    {% for theme in themes %}
+        <div class = "well">
+            <h2>{{theme.name}}</h2>
+            <a href = "{{base}}/choose/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
+        </div>
+    {% endfor %}
     </section>
 {% endblock main %}

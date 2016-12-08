@@ -53,8 +53,7 @@
 
             //if route is /topic and it's post, set the topic choice for the user
             if($topicChoiceRoute->isEqual($context->rest(), $_SERVER)){
-                $this->postTopic($context);
-                return "oops.twig";
+                return $this->postTopic($context);
                 //add the students topic choice
                 //redirect
             }
@@ -75,6 +74,11 @@
             return 'themes.twig';
         }
 
+        public function getTheme($context){
+            $path = Route::routeBuilder($context->route());
+            $area = substr($path, 7, sizeof($path));
+        }
+
         public function postTopic($context){
             if($context->hasTL() || $context->hasSupervisor() ||$context->hasAdmin()){
                 $fdt = $context->formdata();
@@ -86,9 +90,14 @@
                 if($context->hasSupervisor()){
                     $topic->supervisor = $context->user();
                 }else{
-                    $topic->supervisor = R::findOne("user", "id = '" . $fdt->mustpost('supervisorid') . "'");
+                    if($fdt->haspost('supervisorid')){
+                        $topic->supervisor = R::findOne("user", "id = '" . $fdt->mustpost('supervisorid') . "'");
+                    }
                 }
-                $topic->theme[] = R::findOne("theme", "id = '" . $fdt->mustpost('themeid') . "'");
+
+                $theme = R::findOne("theme", "id = '" . $fdt->mustpost('themeid') . "'");
+
+                $topic->ownTheme[] = $theme;
 
                 R::store($topic);
             }
@@ -99,8 +108,9 @@
 
                 $topic->students[] = $context->user();
 
-                R::store($topic)
+                R::store($topic);
             }
+            return 'test3.twig';
         }
 
         public function postTheme($context){

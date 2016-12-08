@@ -145,7 +145,7 @@
  *
  * @return boolean
  */
-        public function isStudent()
+        public function hasStudent()
         {
             return $this->hasuser() && $this->user()->isStudent();
         }
