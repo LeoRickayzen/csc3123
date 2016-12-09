@@ -1,0 +1,27 @@
+{% extends 'page.twig' %}
+
+{% block header %}
+    <div class="col-md-12">
+	<h1 class="cntr">Select a topic</h1>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <section class="row">
+    {% for topic in topics %}
+        <div class = "well">
+            <h2>{{topic.title}}</h2>
+            <p>{{topic.description}}</p>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    {% for choice in choices%}
+                        <li><a href="#">choice 1 ({{choice}})</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+    </section>
+{% endblock main %}

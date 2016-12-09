@@ -30,7 +30,7 @@
         	if($user != NULL){
         		if($user->isstudent())
 	        	{
-	        		return 'studentIndex.twig';
+	        		return 'studentViews/studentIndex.twig';
 	        	}
 	        	if($user->isTL())
 	        	{

@@ -47,7 +47,7 @@
             }
 
             if($themeSpecificRoute->isEqual($context->rest(), $_SERVER)){
-                $area = substr($path, 7, sizeof($path));
+                return $this->getTheme($context);
                 //return twig with topics within that specific area
             }
 
@@ -71,12 +71,30 @@
 
             $context->local()->addval('themes', $themes);
 
-            return 'themes.twig';
+            return 'studentViews/themes.twig';
         }
 
         public function getTheme($context){
-            $path = Route::routeBuilder($context->route());
-            $area = substr($path, 7, sizeof($path));
+            $path = Route::routeBuilder($context->rest());
+            
+            $theme = substr($path, 6, strlen($path));
+            
+            $themeObj = R::findOne('theme', 'name="' . $theme . '"');
+            
+            $topicIDs = R::findAll('theme_topic', 'theme_id = "' . $themeObj->id . '"');
+
+            $topics = [];
+
+            //Debugger::write($topicIDs);
+
+            foreach($topicIDs as $topicID){
+                $topic = R::findOne('topic', 'id = "' . $topicID->topic_id . '"');
+                $topics[] = $topic;
+            }
+
+            $context->local()->addval('topics', $topics);
+
+            return 'studentViews/topics.twig';
         }
 
         public function postTopic($context){
@@ -86,7 +104,9 @@
                 $topic = R::dispense('topic');
 
                 $topic->title = $fdt->mustpost('title');
+                
                 $topic->description = $fdt->mustpost('description');
+                
                 if($context->hasSupervisor()){
                     $topic->supervisor = $context->user();
                 }else{
@@ -96,9 +116,11 @@
                 }
 
                 $theme = R::findOne("theme", "id = '" . $fdt->mustpost('themeid') . "'");
+                
+                $theme->sharedTopic[] = $topic;
+                $topic->sharedTheme[] = $theme;
 
-                $topic->ownTheme[] = $theme;
-
+                R::store($theme);
                 R::store($topic);
             }
             if($context->hasStudent()){
@@ -106,20 +128,15 @@
 
                 $topic = R::findOne('topic', "id ='" . $fdt->mustpost('topicid') . "'");
 
-                $topic->students[] = $context->user();
+                $choiceNo = $fdt->mustpost('choiceNo');
 
-                R::store($topic);
+                $context->user()->userChoose($topic, $choiceNo);
+                return 'test1.twig';
             }
             return 'test3.twig';
         }
 
         public function postTheme($context){
-
-            if($context->hasTL()){
-
-            }else{
-
-            }
 
             $fdt = $context->formdata();
             

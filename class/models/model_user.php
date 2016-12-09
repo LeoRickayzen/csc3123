@@ -175,7 +175,46 @@
         public function isSupervisor()
         {
             return is_object($this->hasrole('project', 'Supervisor'));
-        }         
+        }
+
+/**
+ * Get the users current topic choices,
+ * if the user hasn't made any or some, a blank space is passed
+ *
+ * @return array
+ */
+        public function userChoices(){
+            $id = $this->bean->id;
+            $topics = R::find('user_topic', "user_id = '" . $id . "'");
+        }
+/**
+ * User chooses a topic
+ * 
+ * @return void
+ */
+        public function userChoose($topic, $choiceNum){
+            $user = $this->bean;
+            $relationByChoice = R::findOne('userchoice_topic', 'topic_id = "' . $topic->id . '" AND user_id = "' . $user->id . '"');
+            $relationByChoiceNum = R::findOne('userchoice_topic', 'choice_num = "' . $choiceNum . '"');
+            //if the student hasn't already chosen that topic or allocated that choice number
+            if($relationByChoice == NULL && $relationByChoiceNum == NULL){
+                $user->link('userchoice_topic', array('choiceNum'=>$choiceNum))->topic = $topic;
+                $id = R::store($user);
+            }else{
+                //if the student hasn't already allocated that choice number, but has already chosen that topic
+                if($relationByChoiceNum == NULL){
+                    //reallocate the choicen number
+                    $relationByChoice->choiceNum = $choiceNum;
+                    $id = R::store($relationByChoice);
+                }else{
+                    //if the student has already allocated that choice number, but the topic hasn't already been chosen
+                    $relationByChoiceNum->topicId = $topic->id;
+                    $relationByChoiceNum->userId = $user->id;
+                    $id = R::store($relationByChoiceNum);
+                }
+            }
+        }
+
 /**
  * Set the user's password
  *
