@@ -94,6 +94,8 @@
 
             $context->local()->addval('topics', $topics);
 
+            $context->local()->addval('topicChoices', $context->user()->userChoices());
+
             return 'studentViews/topics.twig';
         }
 
