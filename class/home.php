@@ -30,11 +30,12 @@
         	if($user != NULL){
         		if($user->isstudent())
 	        	{
+                    $context->local()->addval('topicChoices', $context->user()->userChoices());
 	        		return 'studentViews/studentIndex.twig';
 	        	}
 	        	if($user->isTL())
 	        	{
-	        		return 'tlIndex.twig';
+	        		return 'themeLeaderViews/index.twig';
 	        	}
 	        	if($user->isdeveloper() || $user->isadmin())
 	        	{

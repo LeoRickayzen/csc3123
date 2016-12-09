@@ -22,10 +22,6 @@
         public function handle($context)
         {
 
-            $topics = array("");
-
-            $topicLinks = array("all, ");
-
             $rest = $context->rest();
 
             $path = Route::routeBuilder($rest);
@@ -75,6 +71,7 @@
         }
 
         public function getTheme($context){
+
             $path = Route::routeBuilder($context->rest());
             
             $theme = substr($path, 6, strlen($path));
@@ -96,7 +93,12 @@
 
             $context->local()->addval('topicChoices', $context->user()->userChoices());
 
-            return 'studentViews/topics.twig';
+            if($context->hasTL()){
+                return 'themeLeaderViews/topics.twig';
+            }
+            if($context->hasStudent()){   
+                return 'studentViews/topics.twig';
+            }
         }
 
         public function postTopic($context){

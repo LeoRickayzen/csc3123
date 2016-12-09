@@ -167,11 +167,6 @@
 	{
 	    return $this->tokauth;
 	}
-
-    public function getUserChoices()
-    {
-        return $this->user()->userChoices();
-    }
 /**
  * Check for logged in and 403 if not
  */

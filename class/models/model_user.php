@@ -186,11 +186,11 @@
         public function userChoices(){
             $id = $this->bean->id;
             $topics = R::find('userchoice_topic', "user_id = '" . $id . "'");
-            $topicObjs = [];
+            $topicObjs = [null, null, null, null, null, null, null, null, null, null];
             foreach($topics as $topic){
                 $topicObj = R::findOne('topic', "id = '" . $topic->topicId . "'");
                 $topicObj->choiceNumber = $topic->choiceNum;
-                $topicObjs[] = $topicObj;
+                $topicObjs[$topicObj->choiceNumber] = $topicObj;
             }
             return $topicObjs;
         }
