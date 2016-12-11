@@ -15,12 +15,13 @@
                 <a href = "{{base}}/choose/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        {% for i in 1..10 %}
-                            <li><a>choice {{i}}</a></li>
-                        {% endfor %}
-                    </ul>
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for i in 1..10 %}
+                                <li><a>choice {{i}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </button>
                 </div>
             </div>
         {% endfor %}

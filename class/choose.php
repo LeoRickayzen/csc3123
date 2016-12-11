@@ -9,7 +9,7 @@
 /**
  * Support / or /home
  */
-    class Studentchoose extends Siteaction
+    class Choose extends Siteaction
     {
 /**
  * Handle home operations /
@@ -39,7 +39,6 @@
 
             if($themePostRoute->isEqual($context->rest(), $_SERVER)){
                 $this->postTheme($context);
-                return "test3.twig";
             }
 
             if($themeSpecificRoute->isEqual($context->rest(), $_SERVER)){
@@ -68,8 +67,13 @@
             $context->local()->addval('themes', $themes);
             
             $context->local()->addval('topicChoices', $context->user()->userChoices());
-
-            return 'studentViews/themes.twig';
+            
+            if($context->hasStudent()){
+                return 'studentViews/themes.twig';
+            }
+            if($context->hasML()){
+                return 'moduleLeaderViews/themes.twig';
+            }
         }
 
         public function getTheme($context){
@@ -100,6 +104,9 @@
             }
             if($context->hasStudent()){   
                 return 'studentViews/topics.twig';
+            }
+            if($context->hasML()){
+                return 'moduleLeaderViews/topics.twig';
             }
         }
 

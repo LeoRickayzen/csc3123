@@ -8,22 +8,30 @@
 
 {% block main %}
     <section>
-        {% for student in students %}
+        <form action = "{{base}}/allocate/topic" method = "post">
             <div class = "well">
-                <p class = "row">
-                    <span>{{student.id}}</span>
-                    <span>{{student.email}}</span>
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">allocate
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                        {% for topic in student.ownChoices %}
-                            <li><a>{{topic.choice_number}}: {{topic.title}}</a></li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                </p>
+                <span class = "col-md-2">student id</span>
+                <span class = "col-md-2">email address</span>
+                {% for student in students %}
+                    <br>
+                    <p class = "row">
+                        <span class = "col-md-2">{{student.id}}</span>
+                        <span class = "col-md-2">{{student.email}}</span>
+                        <div class="form-group col-md-2">
+                            <select class="form-control" name = "topicStudent">
+                            {% set i = 0 %}
+                            {% for topic in student.ownChoices %}
+                                {% set i = i + 1 %}
+                                <option value = "{{topic.id}},{{student.id}}" >{{i}}: {{topic.title}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </p>
+                {% endfor %}
             </div>
-        {% endfor %}
+            <div class = "well">
+                <button class = "btn btn-primary" type="submit" value = "Submit">Submit selections</button>
+            </div> 
+        </form>
     </section>
 {% endblock main %}

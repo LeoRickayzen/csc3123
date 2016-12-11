@@ -114,7 +114,7 @@
             return is_object($this->luser);
         }
 
-        public function hasModuleLeader(){
+        public function hasML(){
             return $this->hasuser() && $this->user()->isModuleLeader();
         }
 /**

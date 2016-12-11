@@ -26,33 +26,30 @@
             $rest = $context->rest();
 
             $path = Route::routeBuilder($rest);
-            //if($context->hasModuleLeader())
-            //{    
-                if($getAllocation->isEqual($rest, $_SERVER))
-                {
-                    $context->local()->addval('students', $this->getAllocations($context));
-                    return 'moduleLeaderViews/allocator.twig';
-                }
-                if($allocateTopic->isEqual($rest, $_SERVER))
-                {
-                    $this->allocateTopic($context);
-                }
-            //}
-            else
+            
+            if($getAllocation->isEqual($rest, $_SERVER))
             {
-
+                $context->local()->addval('students', $this->getAllocations($context));
+                return 'moduleLeaderViews/allocator.twig';
             }
             
-            return 'test3.twig';
+            if($allocateTopic->isEqual($rest, $_SERVER))
+            {
+                $this->allocateTopic($context);
+            }
         }
 
         public function allocateTopic($context)
         {
             $fdt = $context->formdata();
+
+            $formins = explode(',', $fdt->mustpost('topicStudent'));
+
+            $topicid = $formins[0];
             
-            $topicid = $fdt->mustpost('topic');
-            
-            $studentid = $fdt->mustpost('studentid');
+            $studentid = $formins[1];
+
+            Debugger::write($topicid . ' ' . $studentid);
 
             $student = R::findOne('user', 'id = "' . $studentid . '"');
 
@@ -78,13 +75,16 @@
                 
                 $choices = [];
 
+                for($i = 0; $i < 10; $i++){
+                    $choices[$i] = 'no preference';
+                }
+
                 foreach($choicesids as $choice)
                 {
-
                     $topic = R::findOne('topic', 'id = "' . $choice->topicId . '"');
-                    $topic->choiceNumber = $choice->choice_num;
-                    $choices[] = $topic;
-                
+                    $choiceNumber = $choice->choice_num;
+                    $topic->choiceNumber = $choiceNumber;
+                    $choices[$choiceNumber] = $topic;                
                 }
                 
                 $student->ownChoices = $choices;

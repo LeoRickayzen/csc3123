@@ -41,6 +41,9 @@
 	        	{
 	        		return 'index.twig';
 	        	}
+                if($user->isModuleLeader()){
+                    return 'moduleLeaderViews/index.twig';
+                }
         	}
         	else
         	{
