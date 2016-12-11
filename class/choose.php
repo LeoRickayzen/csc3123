@@ -29,7 +29,7 @@
             $themeRoute = new Route('theme', 'GET');
             $themeSpecificRoute = new Route('theme/', 'GET');
             $themePostRoute = new Route('theme', 'POST');
-            $topicChoiceRoute = new Route('topic', 'POST');
+            $topicPostRoute = new Route('topic', 'POST');
             $topicSpecificRoute = new Route('topic/', 'GET');
 
             //get all the areas
@@ -47,7 +47,7 @@
             }
 
             //if route is /topic and it's post, set the topic choice for the user
-            if($topicChoiceRoute->isEqual($context->rest(), $_SERVER)){
+            if($topicPostRoute->isEqual($context->rest(), $_SERVER)){
                 return $this->postTopic($context);
                 //add the students topic choice
                 //redirect
@@ -81,8 +81,10 @@
             $path = Route::routeBuilder($context->rest());
             
             $theme = substr($path, 6, strlen($path));
-            
+
             $themeObj = R::findOne('theme', 'name="' . $theme . '"');
+
+            $context->local()->addval('theme', $themeObj->id);
             
             $topicIDs = R::findAll('theme_topic', 'theme_id = "' . $themeObj->id . '"');
 
@@ -111,7 +113,7 @@
         }
 
         public function postTopic($context){
-            if($context->hasTL() || $context->hasSupervisor() ||$context->hasAdmin()){
+            if($context->hasTL() || $context->hasSupervisor() || $context->hasAdmin() || $context->hasML()){
                 $fdt = $context->formdata();
                 
                 $topic = R::dispense('topic');
@@ -128,7 +130,7 @@
                     }
                 }
 
-                $theme = R::findOne("theme", "id = '" . $fdt->mustpost('themeid') . "'");
+                $theme = R::findOne("theme", "id = '" . $fdt->mustpost('theme') . "'");
                 
                 $theme->sharedTopic[] = $topic;
                 $topic->sharedTheme[] = $theme;
@@ -144,7 +146,6 @@
                 $choiceNo = $fdt->mustpost('choiceNo');
 
                 $context->user()->userChoose($topic, $choiceNo);
-                return 'test1.twig';
             }
             return 'test3.twig';
         }
@@ -157,7 +158,7 @@
             
             $theme = R::dispense('theme');
             $theme->name = $name;
-            $theme->leader = $context->user();
+            $theme->leader = $fdt->mustpost('TLid');
             
             $id = R::store($theme);
         }

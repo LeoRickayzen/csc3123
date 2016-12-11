@@ -16,12 +16,14 @@
                     <button type="button" class="btn btn-primary">Edit</button>
                     <button type="button" class="btn btn-primary">Submit edit</button>
                 </div>
-                <div class = "well">
-                    <form action="">
-                        <button type="submit" class="btn btn-primary">add theme</button>
-                    </form>
-                </div>
             {% endfor %}
+            <div class = "well">
+                <form action="{{base}}/choose/theme" method="post">
+                    <input type="text" class="form-control" name = "name" placeholder="theme name">
+                    <input type="text" class="form-control" name = "TLid" placeholder="themeleader id">
+                    <button type="submit" class="btn btn-primary">add theme</button>
+                </form>
+            </div>
         </div>
     </section>
 {% endblock main %}

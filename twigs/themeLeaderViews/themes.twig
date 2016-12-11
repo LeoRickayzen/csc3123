@@ -1,0 +1,21 @@
+{% extends 'page.twig' %}
+
+{% block header %}
+    <div class="col-md-12">
+	<h1 class="cntr">Select a theme</h1>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <section class="row">
+        <div class = "col-md-8">
+            {% for theme in themes %}
+                <div class = "well">
+                    <h2>{{theme.name}}</h2>
+                    <a href = "{{base}}/choose/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
+                    <a href = "{{base}}/allocate/supervisors/{{theme.name}}"><button type="submit" class="btn btn-primary">Allocate supervisors</button></a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock main %}
