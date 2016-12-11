@@ -178,6 +178,16 @@
         }
 
 /**
+ * Is this user a module leader?
+ *
+ * @return boolean
+ */
+        public function isModuleLeader()
+        {
+            return is_object($this->hasrole('project', 'ModuleLeader'));
+        }
+
+/**
  * Get the users current topic choices,
  * if the user hasn't made any or some, a blank space is passed
  *

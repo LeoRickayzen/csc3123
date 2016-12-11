@@ -66,6 +66,8 @@
             $themes = R::findAll("theme");
 
             $context->local()->addval('themes', $themes);
+            
+            $context->local()->addval('topicChoices', $context->user()->userChoices());
 
             return 'studentViews/themes.twig';
         }

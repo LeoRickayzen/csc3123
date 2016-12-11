@@ -1,0 +1,29 @@
+{% extends 'page.twig' %}
+
+{% block header %}
+    <div class="col-md-12">
+	<h1 class="cntr">Allocate topics</h1>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <section>
+        {% for student in students %}
+            <div class = "well">
+                <p class = "row">
+                    <span>{{student.id}}</span>
+                    <span>{{student.email}}</span>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">allocate
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                        {% for topic in student.ownChoices %}
+                            <li><a>{{topic.choice_number}}: {{topic.title}}</a></li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </p>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock main %}

@@ -113,6 +113,10 @@
         {
             return is_object($this->luser);
         }
+
+        public function hasModuleLeader(){
+            return $this->hasuser() && $this->user()->isModuleLeader();
+        }
 /**
  * Do we have a logged in admin user?
  *
