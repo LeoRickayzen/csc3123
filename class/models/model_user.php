@@ -241,6 +241,11 @@
             }
         }
 
+        public function allocateSupervisor($supervisorId){
+            $user = $this->bean->supervisor = $supervisorId;
+            R::store($user);
+        }
+
 /**
  * Set the user's password
  *

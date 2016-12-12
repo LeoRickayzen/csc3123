@@ -59,38 +59,16 @@
             if($context->hasTL() && $context->user()->hasTheme($themename, $context->user()->id))
             {
 
-                $theme = R::findOne('theme', 'name = "' . $themename . '"');
-
-                $topics = R::findAll('topic', 'theme_id = "' . $theme->id . '"');
-                    
-                $students = [];
-                    
-                foreach($topics as $topic)
-                {
-                    $user = R::findOne('user', 'allocated_topic = "' . $topic->id . '"');
-                    if($user != null)
-                    {
-                        $students[] = $user;
-                    }
-                }
-                $context->local()->addval('students', $students);
-                $context->local()->addval('supervisors', $this->findSupervisors());
+                $userController = new UserController();
+                
+                $context->local()->addval('students', $userController->getStudentsByTheme($themename));
+                $context->local()->addval('supervisors', $userController->getAllSupervisors());
             }
             else
             {
                 return "test3.twig";
             }
             return 'themeLeaderViews/allocation.twig';
-        }
-
-        public function findSupervisors(){
-            $userids = R::findAll('role', 'rolename_id = "4"');
-            $users = [];
-            foreach($userids as $userid){
-                $user = R::findOne('user', 'id = "' . $userid->user_id . '"');
-                $users[] = $user;
-            }
-            return $users;
         }
 
         public function postSupervisorAllocation($context){
@@ -126,9 +104,12 @@
 
             $student = R::findOne('user', 'id = "' . $studentid . '"');
 
+            $topic = R::findOne('topic', 'id = "' . $topicid . '"');
+
             $student->allocatedTopic = $topicid;
 
             R::store($student);
+
         }
 
         public function getAllocations($context)
