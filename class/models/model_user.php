@@ -242,7 +242,8 @@
         }
 
         public function allocateSupervisor($supervisorId){
-            $user = $this->bean->supervisor = $supervisorId;
+            $user = $this->bean;
+            $user->supervisor = $supervisorId;
             R::store($user);
         }
 

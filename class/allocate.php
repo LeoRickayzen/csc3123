@@ -75,18 +75,10 @@
 
             $userids = array_keys($_POST);
 
-            foreach($userids as $userid){
-                
-                $user = R::findOne('user', 'id = "' . $userid . '"');
-
-                $supervisorid = $_POST[$userid];
-
-                //$supervisorObj = R::findOne('supervisor', 'id = "' . $supervisorid . '"');
-
-                $user->supervisor = $supervisorid;
-
-                R::store($user);
+            $userController = new UserController();
             
+            foreach($userids as $userid){
+                $userController->allocateSupervisor($userid, $_POST[$userid]);
             }
 
             return 'test3.twig';

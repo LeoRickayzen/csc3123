@@ -29,5 +29,10 @@
             }
             return $students;
 		}
+
+        public function allocateSupervisor($userid, $supervisorid){
+            $user = R::findOne('user', 'id = "' . $userid . '"');
+            $user->allocateSupervisor($supervisorid);
+        }
 	}
 ?>
