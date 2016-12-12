@@ -44,6 +44,9 @@
                 if($user->isModuleLeader()){
                     return 'moduleLeaderViews/index.twig';
                 }
+                if($user->isSupervisor()){
+                    return 'supervisorViews/index.twig';
+                }
         	}
         	else
         	{

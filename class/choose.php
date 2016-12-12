@@ -77,6 +77,9 @@
             if($context->hasTL()){
                 return 'themeLeaderViews/themes.twig';
             }
+            if($context->hasSupervisor()){
+                return 'supervisorViews/themes.twig';
+            }
         }
 
         public function getTheme($context){
@@ -108,10 +111,27 @@
             if($context->hasML()){
                 return 'moduleLeaderViews/topics.twig';
             }
-            if($context->hasTL() && $context->user()->hasTheme($theme, $context->user()->id)){
-                return 'themeLeaderViews/topics.twig';
-            }else{
-                return 'themeLeaderViews/topicExplore.twig';
+            if($context->hasSupervisor())
+            {
+                if($context->user()->hasTheme($theme, $context->user()->id))
+                {
+                    return 'supervisorViews/topics.twig';
+                }
+                else
+                {
+                    return 'supervisorViews/topicsExplore.twig';
+                }
+            }
+            if($context->hasTL())
+            {
+                if($context->user()->hasTheme($theme, $context->user()->id))
+                {
+                    return 'themeLeaderViews/topics.twig';
+                }
+                else
+                {
+                    return 'themeLeaderViews/topicExplore.twig';
+                }
             }
         }
 

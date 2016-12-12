@@ -1,0 +1,24 @@
+{% extends 'page.twig' %}
+
+{% block header %}
+    <div class="col-md-12">
+	<h1 class="cntr">Select a topic</h1>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <section class="row">
+        {% for topic in topics %}
+            <div class = "well">
+                <h2>{{topic.title}}</h2>
+                <p>{{topic.description}}</p>
+                <div class="dropdown">
+                    <a href="{{base}}/edit/topic/{{topic.id}}"><button type="button" class="btn btn-primary">Edit theme</button></a>
+                </div>
+            </div>
+        {% endfor %}
+        <div class = "well text-right">
+            <a href="{{base}}/edit/topic/{{topic.id}}"><button type="button" class="btn btn-primary">Add theme</button></a>
+        </div>
+    </section>
+{% endblock main %}
