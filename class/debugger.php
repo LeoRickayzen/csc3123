@@ -2,7 +2,7 @@
 	class Debugger{
 		public static function write($string){
 			$file = fopen("debugger.txt", "w" );
-			fwrite($file, $string);
+			fwrite($file, $string . '\n');
 			fclose($file);
 		}
 	}

@@ -74,6 +74,9 @@
             if($context->hasML()){
                 return 'moduleLeaderViews/themes.twig';
             }
+            if($context->hasTL()){
+                return 'themeLeaderViews/themes.twig';
+            }
         }
 
         public function getTheme($context){
@@ -90,8 +93,6 @@
 
             $topics = [];
 
-            //Debugger::write($topicIDs);
-
             foreach($topicIDs as $topicID){
                 $topic = R::findOne('topic', 'id = "' . $topicID->topic_id . '"');
                 $topics[] = $topic;
@@ -101,8 +102,10 @@
 
             $context->local()->addval('topicChoices', $context->user()->userChoices());
 
-            if($context->hasTL()){
+            if($context->hasTL() && $context->user()->hasTheme($theme, $context->user()->id)){
                 return 'themeLeaderViews/topics.twig';
+            }else{
+                return 'themeLeaderViews/topicExplore.twig';
             }
             if($context->hasStudent()){   
                 return 'studentViews/topics.twig';

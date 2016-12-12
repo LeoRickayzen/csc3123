@@ -204,6 +204,15 @@
             }
             return $topicObjs;
         }
+
+        public function hasTheme($themeName, $uid){
+            $theme = R::findOne('theme', 'name = "' . $themeName . '"');
+            if($theme->leader_id == $uid){
+                return true;
+            }else{
+                return false;
+            }
+        }
 /**
  * User chooses a topic
  * 

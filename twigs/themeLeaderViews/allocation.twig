@@ -1,0 +1,30 @@
+{% extends 'page.twig' %}
+
+{% block header %}
+    <div class="col-md-12">
+	<h1 class="cntr">Allocate supervisors</h1>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <section class="row">
+        <div class = "well">
+            <span class = "col-md-2"><strong>student id</strong></span>
+            <span class = "col-md-4"><strong>student email address</strong></span>
+            <span class = "col-md-4"><strong>supervisor email address</strong></span>
+            <br>
+            {% for student in students %}
+                <br>
+                <span class = "col-md-2">{{student.id}}</span>
+                <span class = "col-md-4">{{student.email}}</span>
+                <div class="form-group col-md-4">
+                    <select class="form-control" name = "topicStudent">
+                    {% for supervisor in supervisors %}
+                        <option value = "{{topic.id}},{{student.id}}" >{{supervisor.email}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock main %}

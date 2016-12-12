@@ -23,6 +23,10 @@
 
             $allocateTopic = new Route('topic', 'POST');
 
+            $allocateSupervisorsGet = new Route('supervisors/', 'GET');
+
+            $allocateSupervisorsPost = new Route('supervisors', 'POST');
+
             $rest = $context->rest();
 
             $path = Route::routeBuilder($rest);
@@ -37,6 +41,55 @@
             {
                 $this->allocateTopic($context);
             }
+
+            if($allocateSupervisorsGet->isEqual($rest, $_SERVER))
+            {
+                $theme = substr($path, 12, strlen($path));
+                return $this->getAllocateSupervisors($context, $theme);
+            }
+        }
+
+        public function getAllocateSupervisors($context, $themename)
+        {
+            if($context->hasTL() && $context->user()->hasTheme($themename, $context->user()->id))
+            {
+
+                $theme = R::findOne('theme', 'name = "' . $themename . '"');
+
+                $topics = R::findAll('topic', 'theme_id = "' . $theme->id . '"');
+                    
+                $students = [];
+                    
+                foreach($topics as $topic)
+                {
+                    $user = R::findOne('user', 'allocated_topic = "' . $topic->id . '"');
+                    if($user != null)
+                    {
+                        $students[] = $user;
+                    }
+                }
+                $context->local()->addval('students', $students);
+                $context->local()->addval('supervisors', $this->findSupervisors());
+            }
+            else
+            {
+                return "test3.twig";
+            }
+            return 'themeLeaderViews/allocation.twig';
+        }
+
+        public function findSupervisors(){
+            $userids = R::findAll('role', 'rolename_id = "4"');
+            $users = [];
+            foreach($userids as $userid){
+                $user = R::findOne('user', 'id = "' . $userid->user_id . '"');
+                $users[] = $user;
+            }
+            return $users;
+        }
+
+        public function postSupervisorAllocation($context){
+
         }
 
         public function allocateTopic($context)
@@ -48,8 +101,6 @@
             $topicid = $formins[0];
             
             $studentid = $formins[1];
-
-            Debugger::write($topicid . ' ' . $studentid);
 
             $student = R::findOne('user', 'id = "' . $studentid . '"');
 
