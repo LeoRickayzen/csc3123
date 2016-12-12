@@ -102,16 +102,16 @@
 
             $context->local()->addval('topicChoices', $context->user()->userChoices());
 
-            if($context->hasTL() && $context->user()->hasTheme($theme, $context->user()->id)){
-                return 'themeLeaderViews/topics.twig';
-            }else{
-                return 'themeLeaderViews/topicExplore.twig';
-            }
             if($context->hasStudent()){   
                 return 'studentViews/topics.twig';
             }
             if($context->hasML()){
                 return 'moduleLeaderViews/topics.twig';
+            }
+            if($context->hasTL() && $context->user()->hasTheme($theme, $context->user()->id)){
+                return 'themeLeaderViews/topics.twig';
+            }else{
+                return 'themeLeaderViews/topicExplore.twig';
             }
         }
 
@@ -144,11 +144,15 @@
             if($context->hasStudent()){
                 $fdt = $context->formdata();
 
-                $topic = R::findOne('topic', "id ='" . $fdt->mustpost('topicid') . "'");
+                $topics = array_keys($_POST);
 
-                $choiceNo = $fdt->mustpost('choiceNo');
+                foreach($topics as $topic){
+                    $topicObj = R::findOne('topic', "id ='" . $topic . "'");
 
-                $context->user()->userChoose($topic, $choiceNo);
+                    $choiceNo = $_POST[$topic];
+
+                    $context->user()->userChoose($topicObj, $choiceNo);
+                }
             }
             return 'test3.twig';
         }

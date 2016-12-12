@@ -8,23 +8,28 @@
 
 {% block main %}
     <section class="row">
-        <div class = "well">
-            <span class = "col-md-2"><strong>student id</strong></span>
-            <span class = "col-md-4"><strong>student email address</strong></span>
-            <span class = "col-md-4"><strong>supervisor email address</strong></span>
-            <br>
-            {% for student in students %}
+        <form action="{{base}}/allocate/supervisors" method="post">
+            <div class = "well">
+                <span class = "col-md-2"><strong>student id</strong></span>
+                <span class = "col-md-4"><strong>student email address</strong></span>
+                <span class = "col-md-4"><strong>supervisor email address</strong></span>
                 <br>
-                <span class = "col-md-2">{{student.id}}</span>
-                <span class = "col-md-4">{{student.email}}</span>
-                <div class="form-group col-md-4">
-                    <select class="form-control" name = "topicStudent">
-                    {% for supervisor in supervisors %}
-                        <option value = "{{topic.id}},{{student.id}}" >{{supervisor.email}}</option>
-                    {% endfor %}
-                    </select>
-                </div>
-            {% endfor %}
-        </div>
+                {% for student in students %}
+                    <br>
+                    <span class = "col-md-2">{{student.id}}</span>
+                    <span class = "col-md-4">{{student.email}}</span>
+                    <div class="form-group col-md-4">
+                        <select class="form-control" name = "{{student.id}}">
+                        {% for supervisor in supervisors %}
+                            <option value = "{{supervisor.id}}" >{{supervisor.email}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class = "well">
+                <button type="Submit" class="btn btn-primary">Submit choices</button>
+            </div>
+        </form>
     </section>
 {% endblock main %}

@@ -47,6 +47,11 @@
                 $theme = substr($path, 12, strlen($path));
                 return $this->getAllocateSupervisors($context, $theme);
             }
+
+            if($allocateSupervisorsPost->isEqual($rest, $_SERVER))
+            {
+                return $this->postSupervisorAllocation($context);
+            }
         }
 
         public function getAllocateSupervisors($context, $themename)
@@ -90,6 +95,23 @@
 
         public function postSupervisorAllocation($context){
 
+            $userids = array_keys($_POST);
+
+            foreach($userids as $userid){
+                
+                $user = R::findOne('user', 'id = "' . $userid . '"');
+
+                $supervisorid = $_POST[$userid];
+
+                //$supervisorObj = R::findOne('supervisor', 'id = "' . $supervisorid . '"');
+
+                $user->supervisor = $supervisorid;
+
+                R::store($user);
+            
+            }
+
+            return 'test3.twig';
         }
 
         public function allocateTopic($context)

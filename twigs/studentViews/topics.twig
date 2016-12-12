@@ -8,23 +8,26 @@
 
 {% block main %}
     <section class="row">
-        <div class = "col-md-8">
-            {% for topic in topics %}
-                <div class = "well">
-                    <h2>{{topic.title}}</h2>
-                    <p>{{topic.description}}</p>
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            {% for i in 1..10 %}
-                                <li><a>choice {{i}}</a></li>
-                            {% endfor %}
-                        </ul>
+        <form action="{{base}}/choose/topic" method="post">
+            <div class = "col-md-8">
+                {% for topic in topics %}
+                    <div class = "well">
+                        <h2>{{topic.title}}</h2>
+                        <p>{{topic.description}}</p>
+                        <div class="form-group col-md-2">
+                            <select class="form-control" name = "{{topic.id}}">
+                                {% for i in 1..10 %}
+                                    <option value = "{{i-1}}">choice {{i}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
+                {% endfor %}   
+                <div class = "well">
+                    <button class = "btn btn-primary" type="submit" value = "Submit">Submit selections</button>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        </form>
         <div class = "well col-md-4">
             <h2>Your choices so far:</h2>
             {% set i = 0 %}
