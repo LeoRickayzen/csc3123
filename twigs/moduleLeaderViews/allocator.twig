@@ -10,14 +10,14 @@
     <section>
         <form action = "{{base}}/allocate/topic" method = "post">
             <div class = "well">
-                <span class = "col-md-2">student id</span>
-                <span class = "col-md-2">email address</span>
+                <span class = "col-md-2"><strong>student id</strong></span>
+                <span class = "col-md-4"><strong>email address</strong></span>
                 {% for student in students %}
                     <br>
                     <p class = "row">
                         <span class = "col-md-2">{{student.id}}</span>
-                        <span class = "col-md-2">{{student.email}}</span>
-                        <div class="form-group col-md-2">
+                        <span class = "col-md-4">{{student.email}}</span>
+                        <div class="form-group col-md-4">
                             <select class="form-control" name = "topicStudent">
                             {% set i = 0 %}
                             {% for topic in student.ownChoices %}

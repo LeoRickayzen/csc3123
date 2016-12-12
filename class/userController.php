@@ -34,5 +34,50 @@
             $user = R::findOne('user', 'id = "' . $userid . '"');
             $user->allocateSupervisor($supervisorid);
         }
+
+        public function allocateTopic($studentid, $topicid){
+            $student = R::findOne('user', 'id = "' . $studentid . '"');
+
+            $topic = R::findOne('topic', 'id = "' . $topicid . '"');
+
+            $student->allocateTopic($topic);
+        }
+
+        public function getAllStudents(){
+            $studentRoles = R::findAll('role', 'rolename_id = "3"');
+
+            $students = [];
+            
+            foreach($studentRoles as $studentRole)
+            {
+                
+                $id = $studentRole->user_id;
+                
+                $student = R::findOne('user', 'id = "' . $id . '"');
+                
+                $students[] = $student;
+            
+            }
+
+            return $students;
+        }
+
+        public function getAllStudentsWithAllocations(){
+
+            $students = $this->getAllStudents();
+            
+            $studentsWA = [];
+
+            foreach($students as $student)
+            {
+                
+                $student->ownChoices = $student->getStudentChoices();
+                
+                $studentsWA[] = $student;
+            
+            }
+            
+            return $students;
+        }
 	}
 ?>

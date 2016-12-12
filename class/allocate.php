@@ -94,52 +94,17 @@
             
             $studentid = $formins[1];
 
-            $student = R::findOne('user', 'id = "' . $studentid . '"');
+            $userController = new UserController();
 
-            $topic = R::findOne('topic', 'id = "' . $topicid . '"');
-
-            $student->allocatedTopic = $topicid;
-
-            R::store($student);
+            $userController->allocateTopic($studentid, $topicid);
 
         }
 
         public function getAllocations($context)
         {
-            $studentsRoles = R::findAll('role', 'rolename_id = "3"');
-            
-            $students = [];
-            
-            foreach($studentsRoles as $studentRole)
-            {
-                
-                $id = $studentRole->user_id;
-                
-                $student = R::findOne('user', 'id = "' . $id . '"');
-                
-                $choicesids = R::findAll('userchoice_topic', 'user_id = "' . $student->id . '"');
-                
-                $choices = [];
+            $userController = new UserController();
 
-                for($i = 0; $i < 10; $i++){
-                    $choices[$i] = 'no preference';
-                }
-
-                foreach($choicesids as $choice)
-                {
-                    $topic = R::findOne('topic', 'id = "' . $choice->topicId . '"');
-                    $choiceNumber = $choice->choice_num;
-                    $topic->choiceNumber = $choiceNumber;
-                    $choices[$choiceNumber] = $topic;                
-                }
-                
-                $student->ownChoices = $choices;
-                
-                $students[] = $student;
-            
-            }
-            
-            return $students;
+            return $userController->getAllStudentsWithAllocations();
         }
     }
 ?>

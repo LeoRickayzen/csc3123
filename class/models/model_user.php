@@ -20,7 +20,7 @@
 /**
  * Check for a role
  *
- * @param string        $contextname    The name of a context...
+ * @param string    $contextname    The name of a context...
  * @param string	$rolename       The name of a role....
  *
  * @return object
@@ -245,6 +245,32 @@
             $user = $this->bean;
             $user->supervisor = $supervisorId;
             R::store($user);
+        }
+
+        public function allocateTopic($topic){
+            $user = $this->bean;
+            $user->allocatedTopic = $topic->id;
+            R::store($user);
+        }
+
+        public function getStudentChoices(){
+            $choicesids = R::findAll('userchoice_topic', 'user_id = "' . $this->bean->id . '"');
+
+            $choices = [];
+
+            for($i = 0; $i < 10; $i++){
+                $choices[$i] = 'no preference';
+            }
+
+            foreach($choicesids as $choice)
+            {
+                $topic = R::findOne('topic', 'id = "' . $choice->topicId . '"');
+                $choiceNumber = $choice->choice_num;
+                $topic->choiceNumber = $choiceNumber;
+                $choices[$choiceNumber] = $topic;                
+            }
+
+            return $choices;
         }
 
 /**
