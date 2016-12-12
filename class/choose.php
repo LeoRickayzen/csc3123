@@ -62,7 +62,10 @@
         }
 
         public function getThemes($context){
-            $themes = R::findAll("theme");
+
+            $themeController = new ThemeController();
+
+            $themes = $themeController->getAllThemes();
 
             $context->local()->addval('themes', $themes);
             
@@ -84,22 +87,19 @@
 
         public function getTheme($context){
 
+            $themeController = new ThemeController();
+
+            $topicController = new TopicController();
+
             $path = Route::routeBuilder($context->rest());
             
             $theme = substr($path, 6, strlen($path));
 
-            $themeObj = R::findOne('theme', 'name="' . $theme . '"');
+            $themeObj = $themeController->getTheme($theme);
 
             $context->local()->addval('theme', $themeObj->id);
             
-            $topicIDs = R::findAll('theme_topic', 'theme_id = "' . $themeObj->id . '"');
-
-            $topics = [];
-
-            foreach($topicIDs as $topicID){
-                $topic = R::findOne('topic', 'id = "' . $topicID->topic_id . '"');
-                $topics[] = $topic;
-            }
+            $topics = $topicController->getTopicByTheme($themeObj->id);
 
             $context->local()->addval('topics', $topics);
 
@@ -136,30 +136,33 @@
         }
 
         public function postTopic($context){
+            
+            $topicController = new TopicController();
+            
             if($context->hasTL() || $context->hasSupervisor() || $context->hasAdmin() || $context->hasML()){
-                $fdt = $context->formdata();
-                
-                $topic = R::dispense('topic');
 
-                $topic->title = $fdt->mustpost('title');
+                $fdt = $context->formdata();
+
+                $title = $fdt->mustpost('title');
                 
-                $topic->description = $fdt->mustpost('description');
+                $description = $fdt->mustpost('description');
                 
-                if($context->hasSupervisor()){
-                    $topic->supervisor = $context->user();
-                }else{
-                    if($fdt->haspost('supervisorid')){
-                        $topic->supervisor = R::findOne("user", "id = '" . $fdt->mustpost('supervisorid') . "'");
+                if($context->hasSupervisor())
+                {
+                    $supervisorid = $context->user()->getId();
+                }
+                else
+                {
+                    if($fdt->haspost('supervisorid'))
+                    {
+                        $supervisorid = $fdt->mustpost('supervisorid');
                     }
                 }
 
-                $theme = R::findOne("theme", "id = '" . $fdt->mustpost('theme') . "'");
-                
-                $theme->sharedTopic[] = $topic;
-                $topic->sharedTheme[] = $theme;
+                $themeid = $fdt->mustpost('theme');
 
-                R::store($theme);
-                R::store($topic);
+                $topicController->newTopic($title, $description, $supervisorid, $themeid);
+
             }
             if($context->hasStudent()){
                 $fdt = $context->formdata();
@@ -167,7 +170,7 @@
                 $topics = array_keys($_POST);
 
                 foreach($topics as $topic){
-                    $topicObj = R::findOne('topic', "id ='" . $topic . "'");
+                    $topicObj = $topicController->findTopicById($topic);
 
                     $choiceNo = $_POST[$topic];
 
@@ -179,15 +182,15 @@
 
         public function postTheme($context){
 
+            $topicController = new TopicController();
+
             $fdt = $context->formdata();
             
             $name = $fdt->mustpost('name');
-            
-            $theme = R::dispense('theme');
-            $theme->name = $name;
-            $theme->leader = $fdt->mustpost('TLid');
-            
-            $id = R::store($theme);
+            $leader = $fdt->mustpost('TLid');
+
+            $topicController->newTheme($name, $leader);
+
         }
 
     }
