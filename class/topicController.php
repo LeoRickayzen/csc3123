@@ -2,7 +2,7 @@
 	class TopicController{
 
 		public function getTopicById($id){
-			return R::findOne('topic', "id ='" . $topic . "'");
+			return R::findOne('topic', "id ='" . $id . "'");
 		}
 
 		public function getTopicByTheme($themeid){

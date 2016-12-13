@@ -1,1 +1,1 @@
-{"id":"9","name":"cryptography","leader_id":"5","topic_id":null}\n
+supervisors/ supervisors/\n

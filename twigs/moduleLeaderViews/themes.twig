@@ -12,13 +12,13 @@
             {% for theme in themes %}
                 <div class = "well">
                     <h2>{{theme.name}}</h2>
-                    <a href = "{{base}}/choose/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
+                    <a href = "{{base}}/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
                     <button type="button" class="btn btn-primary">Edit</button>
                     <button type="button" class="btn btn-primary">Submit edit</button>
                 </div>
             {% endfor %}
             <div class = "well">
-                <form action="{{base}}/choose/theme" method="post">
+                <form action="{{base}}/theme" method="post">
                     <input type="text" class="form-control" name = "name" placeholder="theme name">
                     <input type="text" class="form-control" name = "TLid" placeholder="themeleader id">
                     <button type="submit" class="btn btn-primary">add theme</button>

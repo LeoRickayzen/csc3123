@@ -9,7 +9,7 @@
 /**
  * Support / or /home
  */
-    class Choose extends Siteaction
+    class Theme extends Siteaction
     {
 /**
  * Handle home operations /
@@ -21,16 +21,13 @@
 
         public function handle($context)
         {
-
             $rest = $context->rest();
 
             $path = Route::routeBuilder($rest);
 
-            $themeRoute = new Route('theme', 'GET');
-            $themeSpecificRoute = new Route('theme/', 'GET');
-            $themePostRoute = new Route('theme', 'POST');
-            $topicPostRoute = new Route('topic', 'POST');
-            $topicSpecificRoute = new Route('topic/', 'GET');
+            $themeRoute = new Route('', 'GET');
+            $themePostRoute = new Route('', 'POST');
+            $themeSpecificRoute = new Route('/', 'GET');
 
             //get all the areas
             if($themeRoute->isEqual($context->rest(), $_SERVER)){
@@ -45,20 +42,7 @@
                 return $this->getTheme($context);
                 //return twig with topics within that specific area
             }
-
-            //if route is /topic and it's post, set the topic choice for the user
-            if($topicPostRoute->isEqual($context->rest(), $_SERVER)){
-                return $this->postTopic($context);
-                //add the students topic choice
-                //redirect
-            }
-            
-            if($topicSpecificRoute->isEqual($context->rest(), $_SERVER)){
-                $topic = substr($path, 7, sizeof($path));
-                //return twig about specific topic
-            }
-            return "oops.twig";
-
+            return "test3.twig";
         }
 
         public function getThemes($context){
@@ -91,9 +75,7 @@
 
             $topicController = new TopicController();
 
-            $path = Route::routeBuilder($context->rest());
-            
-            $theme = substr($path, 6, strlen($path));
+            $theme = Route::routeBuilder($context->rest());
 
             $themeObj = $themeController->getTheme($theme);
 
@@ -133,51 +115,6 @@
                     return 'themeLeaderViews/topicExplore.twig';
                 }
             }
-        }
-
-        public function postTopic($context){
-            
-            $topicController = new TopicController();
-            
-            if($context->hasTL() || $context->hasSupervisor() || $context->hasAdmin() || $context->hasML()){
-
-                $fdt = $context->formdata();
-
-                $title = $fdt->mustpost('title');
-                
-                $description = $fdt->mustpost('description');
-                
-                if($context->hasSupervisor())
-                {
-                    $supervisorid = $context->user()->getId();
-                }
-                else
-                {
-                    if($fdt->haspost('supervisorid'))
-                    {
-                        $supervisorid = $fdt->mustpost('supervisorid');
-                    }
-                }
-
-                $themeid = $fdt->mustpost('theme');
-
-                $topicController->newTopic($title, $description, $supervisorid, $themeid);
-
-            }
-            if($context->hasStudent()){
-                $fdt = $context->formdata();
-
-                $topics = array_keys($_POST);
-
-                foreach($topics as $topic){
-                    $topicObj = $topicController->findTopicById($topic);
-
-                    $choiceNo = $_POST[$topic];
-
-                    $context->user()->userChoose($topicObj, $choiceNo);
-                }
-            }
-            return 'test3.twig';
         }
 
         public function postTheme($context){

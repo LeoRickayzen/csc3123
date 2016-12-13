@@ -19,14 +19,15 @@
 
 		public function isEqual($rest, $requests){
 			$path = $this->routeBuilder($rest);
+			Debugger::write(substr($path, 0, $this->length) . ' ' . $this->path);
 			if($this->withVariable){
-				if(strlen($path) >= $this->length && substr($path, 0, $this->length) === $this->path && $this->requestType($requests) === $this->requestType){
+				if($this->requestType($requests) === $this->requestType){
                 	return TRUE;
             	}else{
             		return FALSE;
             	}
 			}else{
-				if(strlen($path) == $this->length && substr($path, 0, $this->length) === $this->path && $this->requestType($requests) === $this->requestType){
+				if(strlen($path) == $this->length && $this->requestType($requests) === $this->requestType){
                 	return TRUE;
             	}else{
             		return FALSE;
