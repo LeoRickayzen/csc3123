@@ -42,7 +42,6 @@
                 return $this->getTheme($context);
                 //return twig with topics within that specific area
             }
-            return "test3.twig";
         }
 
         public function getThemes($context){
@@ -79,6 +78,10 @@
 
             $themeObj = $themeController->getTheme($theme);
 
+            if($themeObj == null){
+                return '404.twig';
+            }
+
             $context->local()->addval('theme', $themeObj->id);
             
             $topics = $topicController->getTopicByTheme($themeObj->id);
@@ -93,27 +96,31 @@
             if($context->hasML()){
                 return 'moduleLeaderViews/topics.twig';
             }
-            if($context->hasSupervisor())
-            {
-                if($context->user()->hasTheme($theme, $context->user()->id))
+            if($context->hasSupervisor() || $context->hasTL()){
+                if($context->hasSupervisor())
                 {
-                    return 'supervisorViews/topics.twig';
+                    if($context->user()->hasTheme($theme, $context->user()->id))
+                    {
+                        return 'supervisorViews/topics.twig';
+                    }
+                    else
+                    {
+                        return 'supervisorViews/topicsExplore.twig';
+                    }
                 }
-                else
+                if($context->hasTL())
                 {
-                    return 'supervisorViews/topicsExplore.twig';
+                    if($context->user()->hasTheme($theme, $context->user()->id))
+                    {
+                        return 'themeLeaderViews/topics.twig';
+                    }
+                    else
+                    {
+                        return 'themeLeaderViews/topicExplore.twig';
+                    }
                 }
-            }
-            if($context->hasTL())
-            {
-                if($context->user()->hasTheme($theme, $context->user()->id))
-                {
-                    return 'themeLeaderViews/topics.twig';
-                }
-                else
-                {
-                    return 'themeLeaderViews/topicExplore.twig';
-                }
+            }else{
+                return 'notallowed.twig';
             }
         }
 
@@ -123,11 +130,14 @@
 
             $fdt = $context->formdata();
             
-            $name = $fdt->mustpost('name');
-            $leader = $fdt->mustpost('TLid');
+            if($fdt->haspost('name') && $fdt->haspost('TLid')){      
+                $name = $fdt->mustpost('name');
+                $leader = $fdt->mustpost('TLid');
+            }
 
             $topicController->newTheme($name, $leader);
 
+            $context->divert('/theme', FALSE, '', FALSE);
         }
 
     }

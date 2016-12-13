@@ -66,7 +66,7 @@
             }
             else
             {
-                return "test3.twig";
+                return "notallowed.twig";
             }
             return 'themeLeaderViews/allocation.twig';
         }
@@ -81,23 +81,27 @@
                 $userController->allocateSupervisor($userid, $_POST[$userid]);
             }
 
-            return 'test3.twig';
+            $context->divert('/theme', FALSE, '', FALSE);
         }
 
         public function allocateTopic($context)
         {
             $fdt = $context->formdata();
+            if($fdt->haspost('topicStudent')){
+                $formins = explode(',', $fdt->mustpost('topicStudent'));
 
-            $formins = explode(',', $fdt->mustpost('topicStudent'));
-
-            $topicid = $formins[0];
+                $topicid = $formins[0];
             
-            $studentid = $formins[1];
+                $studentid = $formins[1];
 
-            $userController = new UserController();
+                $userController = new UserController();
 
-            $userController->allocateTopic($studentid, $topicid);
+                $userController->allocateTopic($studentid, $topicid);
 
+                $context->divert('/home', FALSE, '', FALSE);
+            }else{
+                return 'formerror.twig';
+            }
         }
 
         public function getAllocations($context)

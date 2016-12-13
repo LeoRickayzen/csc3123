@@ -40,7 +40,6 @@
                 $topic = substr($path, 7, sizeof($path));
                 //return twig about specific topic
             }
-            return "oops.twig";
 
         }
 
@@ -52,28 +51,35 @@
 
                 $fdt = $context->formdata();
 
-                $title = $fdt->mustpost('title');
+                if($fdt->haspost('title') && $fdt->haspost('description')){
+
+                    $title = $fdt->mustpost('title');
                 
-                $description = $fdt->mustpost('description');
+                    $description = $fdt->mustpost('description');
                 
-                if($context->hasSupervisor())
-                {
-                    $supervisorid = $context->user()->getId();
-                }
-                else
-                {
-                    if($fdt->haspost('supervisorid'))
+                    if($context->hasSupervisor())
                     {
-                        $supervisorid = $fdt->mustpost('supervisorid');
+                        $supervisorid = $context->user()->getId();
                     }
+                    else
+                    {
+                        if($fdt->haspost('supervisorid'))
+                        {
+                            $supervisorid = $fdt->mustpost('supervisorid');
+                        }else{
+                            return 'formError.twig';
+                        }
+                    }
+
+                    $themeid = $fdt->mustpost('theme');
+
+                    $topicController->newTopic($title, $description, $supervisorid, $themeid);
+
                 }
-
-                $themeid = $fdt->mustpost('theme');
-
-                $topicController->newTopic($title, $description, $supervisorid, $themeid);
 
             }
             if($context->hasStudent()){
+
                 $fdt = $context->formdata();
 
                 $topics = array_keys($_POST);
@@ -81,12 +87,18 @@
                 foreach($topics as $topic){
                     $topicObj = $topicController->getTopicById($topic);
 
+                    if($topicObj == null){
+                        return 'formError.twig';
+                    }
+
                     $choiceNo = $_POST[$topic];
+
+                    Debugger::write($topic);
 
                     $context->user()->userChoose($topicObj, $choiceNo);
                 }
             }
-            return 'test3.twig';
+            $context->divert('/theme', FALSE, '', FALSE);
         }
 
     }
