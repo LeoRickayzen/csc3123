@@ -22,6 +22,8 @@
             $allocateTopic = new Route('topic', 'POST');
             $allocateSupervisorsGet = new Route('supervisors/', 'GET');
             $allocateSupervisorsPost = new Route('supervisors', 'POST');
+            $allocateModuleLeaderGet = new Route('moduleLeader', 'GET');
+            $allocateModuleLeaderPost = new Route('moduleLeader', 'POST');
             $rest = $context->rest();
             $path = Route::routeBuilder($rest);            
             if($getAllocation->isEqual($rest, $_SERVER))

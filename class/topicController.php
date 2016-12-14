@@ -3,7 +3,11 @@
 
 		public function getTopicById($id)
 		{
-			return R::findOne('topic', "id ='" . $id . "'");
+			$themetopic = R::findOne('theme_topic', 'topic_id = "' . $id . '"');
+
+			$topic = R::findOne('topic', "id ='" . $id . "'");
+			$topic->themeId = $themetopic->theme_id;
+			return $topic;
 		}
 
 		public function getTopicByTheme($themeid)
@@ -23,7 +27,7 @@
 			$topic = R::dispense('topic');
 			$topic->title = $title;
 			$topic->description = $description;
-			$topic->supervisor = R::findOne('supervisor', 'id = "' . $supervisorid . '"');
+			$topic->supervisor = R::findOne('user', 'id = "' . $supervisorid . '"');
 			$theme = R::findOne("theme", "id = '" . $themeid . "'");	
 			$theme->sharedTopic[] = $topic;
             $topic->sharedTheme[] = $theme;

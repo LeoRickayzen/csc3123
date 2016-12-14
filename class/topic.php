@@ -59,7 +59,7 @@
                         }
                         else
                         {    
-                            return 'error/404.twig';
+                            //return 'error/404.twig';
                         }
                     }
                     $themeid = $fdt->mustpost('theme');
@@ -75,7 +75,7 @@
                     $topicObj = $topicController->getTopicById($topic);
                     if($topicObj == null)
                     {
-                        return 'error/404.twig';
+                        //return 'error/404.twig';
                     }
                     $choiceNo = $_POST[$topic];
                     Debugger::write($topic);
