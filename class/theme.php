@@ -22,81 +22,72 @@
         public function handle($context)
         {
             $rest = $context->rest();
-
             $path = Route::routeBuilder($rest);
-
             $themeRoute = new Route('', 'GET');
             $themePostRoute = new Route('', 'POST');
             $themeSpecificRoute = new Route('/', 'GET');
-
-            //get all the areas
-            if($themeRoute->isEqual($context->rest(), $_SERVER)){
+            if($themeRoute->isEqual($context->rest(), $_SERVER))
+            {
                 return $this->getThemes($context);
             }
-
-            if($themePostRoute->isEqual($context->rest(), $_SERVER)){
+            if($themePostRoute->isEqual($context->rest(), $_SERVER))
+            {
                 $this->postTheme($context);
             }
-
-            if($themeSpecificRoute->isEqual($context->rest(), $_SERVER)){
+            if($themeSpecificRoute->isEqual($context->rest(), $_SERVER))
+            {
                 return $this->getTheme($context);
-                //return twig with topics within that specific area
             }
         }
 
-        public function getThemes($context){
-
+        public function getThemes($context)
+        {
             $themeController = new ThemeController();
-
             $themes = $themeController->getAllThemes();
-
-            $context->local()->addval('themes', $themes);
-            
-            $context->local()->addval('topicChoices', $context->user()->userChoices());
-            
-            if($context->hasStudent()){
+            $context->local()->addval('themes', $themes);            
+            $context->local()->addval('topicChoices', $context->user()->userChoices());            
+            if($context->hasStudent())
+            {
                 return 'studentViews/themes.twig';
             }
-            if($context->hasML()){
+            if($context->hasML())
+            {
                 return 'moduleLeaderViews/themes.twig';
             }
-            if($context->hasTL()){
+            if($context->hasTL())
+            {
                 return 'themeLeaderViews/themes.twig';
             }
-            if($context->hasSupervisor()){
+            if($context->hasSupervisor())
+            {
                 return 'supervisorViews/themes.twig';
             }
         }
 
-        public function getTheme($context){
-
+        public function getTheme($context)
+        {
             $themeController = new ThemeController();
-
             $topicController = new TopicController();
-
             $theme = Route::routeBuilder($context->rest());
-
             $themeObj = $themeController->getTheme($theme);
-
-            if($themeObj == null){
-                return '404.twig';
+            if($themeObj == null)
+            {
+                return 'error/404.twig';
             }
-
             $context->local()->addval('theme', $themeObj->id);
-            
             $topics = $topicController->getTopicByTheme($themeObj->id);
-
             $context->local()->addval('topics', $topics);
-
             $context->local()->addval('topicChoices', $context->user()->userChoices());
-
-            if($context->hasStudent()){   
+            if($context->hasStudent())
+            {   
                 return 'studentViews/topics.twig';
             }
-            if($context->hasML()){
+            if($context->hasML())
+            {
                 return 'moduleLeaderViews/topics.twig';
             }
-            if($context->hasSupervisor() || $context->hasTL()){
+            if($context->hasSupervisor() || $context->hasTL())
+            {
                 if($context->hasSupervisor())
                 {
                     if($context->user()->hasTheme($theme, $context->user()->id))
@@ -119,24 +110,23 @@
                         return 'themeLeaderViews/topicExplore.twig';
                     }
                 }
-            }else{
-                return 'notallowed.twig';
+            }
+            else
+            {
+                return 'error/403.twig';
             }
         }
 
-        public function postTheme($context){
-
+        public function postTheme($context)
+        {
             $topicController = new TopicController();
-
-            $fdt = $context->formdata();
-            
-            if($fdt->haspost('name') && $fdt->haspost('TLid')){      
+            $fdt = $context->formdata();            
+            if($fdt->haspost('name') && $fdt->haspost('TLid'))
+            {      
                 $name = $fdt->mustpost('name');
                 $leader = $fdt->mustpost('TLid');
             }
-
             $topicController->newTheme($name, $leader);
-
             $context->divert('/theme', FALSE, '', FALSE);
         }
 

@@ -9,22 +9,24 @@
 {% block main %}
     <section class="row">
     <div class = "col-md-8">
-        {% for theme in themes %}
-            <div class = "well">
-                <h2>{{theme.name}}</h2>
-                <a href = "{{base}}/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
+        <form action="{{base}}/topic" method="post">
+            {% for theme in themes %}
+                <div class = "well">
+                    <h2>{{theme.name}}</h2>
+                    <a href = "{{base}}/theme/{{theme.name}}"><button type="button" class="btn btn-primary">Explore</button></a>
+                    <div class="form-group col-md-2">
+                        <select class="form-control" name = "{{theme.id}}">
                             {% for i in 1..10 %}
-                                <li><a>choice {{i}}</a></li>
+                                <option value = "{{i-1}}">choice {{i}}</option>
                             {% endfor %}
-                        </ul>
-                    </button>
+                        </select>
+                    </div>
                 </div>
+            {% endfor %}
+            <div class = "well">
+                <button class = "btn btn-primary" type="submit" value = "Submit">Submit selections</button>
             </div>
-        {% endfor %}
+        </form>
     </div>
     <div class = "well col-md-4">
         <h2>Your choices so far:</h2>

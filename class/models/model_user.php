@@ -193,11 +193,13 @@
  *
  * @return array
  */
-        public function userChoices(){
+        public function userChoices()
+        {
             $id = $this->bean->id;
             $topics = R::find('userchoice_topic', "user_id = '" . $id . "'");
             $topicObjs = [null, null, null, null, null, null, null, null, null, null];
-            foreach($topics as $topic){
+            foreach($topics as $topic)
+            {
                 $topicObj = R::findOne('topic', "id = '" . $topic->topicId . "'");
                 $topicObj->choiceNumber = $topic->choiceNum;
                 $topicObjs[$topicObj->choiceNumber] = $topicObj;
@@ -205,11 +207,15 @@
             return $topicObjs;
         }
 
-        public function hasTheme($themeName, $uid){
+        public function hasTheme($themeName, $uid)
+        {
             $theme = R::findOne('theme', 'name = "' . $themeName . '"');
-            if($theme->leader_id == $uid){
+            if($theme->leader_id == $uid)
+            {
                 return true;
-            }else{
+            }
+            else
+            {
                 return false;
             }
         }
@@ -218,21 +224,28 @@
  * 
  * @return void
  */
-        public function userChoose($topic, $choiceNum){
+        public function userChoose($topic, $choiceNum)
+        {
             $user = $this->bean;
             $relationByChoice = R::findOne('userchoice_topic', 'topic_id = "' . $topic->id . '" AND user_id = "' . $user->id . '"');
             $relationByChoiceNum = R::findOne('userchoice_topic', 'choice_num = "' . $choiceNum . '"');
             //if the student hasn't already chosen that topic or allocated that choice number
-            if($relationByChoice == NULL && $relationByChoiceNum == NULL){
+            if($relationByChoice == NULL && $relationByChoiceNum == NULL)
+            {
                 $user->link('userchoice_topic', array('choiceNum'=>$choiceNum))->topic = $topic;
                 $id = R::store($user);
-            }else{
+            }
+            else
+            {
                 //if the student hasn't already allocated that choice number, but has already chosen that topic
-                if($relationByChoiceNum == NULL){
+                if($relationByChoiceNum == NULL)
+                {
                     //reallocate the choicen number
                     $relationByChoice->choiceNum = $choiceNum;
                     $id = R::store($relationByChoice);
-                }else{
+                }
+                else
+                {
                     //if the student has already allocated that choice number, but the topic hasn't already been chosen
                     $relationByChoiceNum->topicId = $topic->id;
                     $relationByChoiceNum->userId = $user->id;
@@ -241,24 +254,26 @@
             }
         }
 
-        public function allocateSupervisor($supervisorId){
+        public function allocateSupervisor($supervisorId)
+        {
             $user = $this->bean;
             $user->supervisor = $supervisorId;
             R::store($user);
         }
 
-        public function allocateTopic($topic){
+        public function allocateTopic($topic)
+        {
             $user = $this->bean;
             $user->allocatedTopic = $topic->id;
             R::store($user);
         }
 
-        public function getStudentChoices(){
+        public function getStudentChoices()
+        {
             $choicesids = R::findAll('userchoice_topic', 'user_id = "' . $this->bean->id . '"');
-
             $choices = [];
-
-            for($i = 0; $i < 10; $i++){
+            for($i = 0; $i < 10; $i++)
+            {
                 $choices[$i] = 'no preference';
             }
 
