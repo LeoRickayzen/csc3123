@@ -1,14 +1,25 @@
 <?php
 	class UserController{
 		
+        public function getByID($id)
+        {
+            return R::findOne('user', 'id = "' . $id . '"');
+        }
+
 		public function getAllSupervisors()
         {
-            getByRole('Supervisor');
+            return $this->getByRole('Supervisor');
 		}
 
-        public function getByRole($role){
+        pubLic function getAllTL()
+        {
+            return $this->getByRole('ThemeLeader');
+        }
+
+        public function getByRole($role)
+        {
             $nameid = R::findOne('rolename', 'name = "' . $role . '"');
-            $userids = R::findAll('role', 'rolename_id = "' . $nameid->id . '"');
+            $userids = R::findAll('role', 'rolename_id = "' . $nameid->id . '" && rolecontext_id = "2"');
             $users = [];
             foreach($userids as $userid)
             {
@@ -18,7 +29,8 @@
             return $users;
         }
 
-        public function assignLeader($userid, $themeid){
+        public function assignLeader($userid, $themeid)
+        {
             $user = R::findOne('user', 'id = "' . $userid . '"');
             if($user->isTL()){
                 $theme = R::findOne('theme', 'id = "' . $themeid . '"');
@@ -27,6 +39,13 @@
             }else{
                 return false;
             }
+        }
+
+        public function revokeLeader($themeid)
+        {
+            $theme = R::findOne('theme', 'id = "' . $themeid . '"');
+            $theme->leader_id = NULL;
+            R::store($theme);
         }
 
 		public function getStudentsByTheme($themename)

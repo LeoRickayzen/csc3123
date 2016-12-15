@@ -78,7 +78,6 @@
                         //return 'error/404.twig';
                     }
                     $choiceNo = $_POST[$topic];
-                    Debugger::write($topic);
                     $context->user()->userChoose($topicObj, $choiceNo);
                 }
             }

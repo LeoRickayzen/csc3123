@@ -22,10 +22,11 @@
             $allocateTopic = new Route('topic', 'POST');
             $allocateSupervisorsGet = new Route('supervisors/', 'GET');
             $allocateSupervisorsPost = new Route('supervisors', 'POST');
-            $allocateModuleLeaderGet = new Route('moduleLeader', 'GET');
-            $allocateModuleLeaderPost = new Route('moduleLeader', 'POST');
+            $allocateModuleLeaderGet = new Route('moduleleader', 'GET');
+            $allocateModuleLeaderPost = new Route('moduleleader', 'POST');
             $rest = $context->rest();
             $path = Route::routeBuilder($rest);            
+
             if($getAllocation->isEqual($rest, $_SERVER))
             {
                 $context->local()->addval('students', $this->getAllocations($context));
@@ -36,11 +37,23 @@
             {
                 $this->allocateTopic($context);
             }
+            
             if($allocateSupervisorsGet->isEqual($rest, $_SERVER))
             {
                 $theme = substr($path, 12, strlen($path));
                 return $this->getAllocateSupervisors($context, $theme);
             }
+
+            if($allocateModuleLeaderGet->isEqual($rest, $_SERVER))
+            {
+                return $this->getModuleLeaders($context);
+            }
+
+            if($allocateModuleLeaderPost->isEqual($rest, $_SERVER))
+            {
+                return $this->postModuleLeaders($context);
+            }
+            
             if($allocateSupervisorsPost->isEqual($rest, $_SERVER))
             {
                 return $this->postSupervisorAllocation($context);
@@ -89,6 +102,40 @@
             else
             {
                 return 'error/404.twig';
+            }
+        }
+
+        public function getModuleLeaders($context)
+        {
+            $userController = new UserController();
+            $themeController = new ThemeController();
+            $themeLeaders = $userController->getAllTL();
+            $supervisors = $userController->getAllSupervisors();
+            $themes = $themeController->getAllThemes();
+            foreach($themes as $theme)
+            {
+                $theme->email = $userController->getByID($theme->leader_id)->email;
+            }
+            $context->local()->addval('themeLeaders', $themeLeaders);
+            $context->local()->addval('themes', $themes);
+            return 'moduleLeaderViews/themeLeaderAllocation.twig';
+        }
+
+        public function postModuleLeaders($context)
+        {
+            Debugger::write('called');
+            $userController = new UserController();
+            if($context->formdata()->haspost('userid') && $context->formdata()->haspost('themeid')){
+                $userid = $context->formdata()->mustpost('userid');
+                $themeid = $context->formdata()->mustpost('themeid');
+                if($userid === 'none'){
+                    $userController->revokeLeader($themeid);
+                }else{
+                    $userController->assignLeader($userid, $themeid);
+                }
+                return $this->getModuleLeaders($context);
+            }else{
+                return 'error/403.twig';
             }
         }
 
