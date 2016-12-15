@@ -11,8 +11,18 @@
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
+                        <li{{page == 'home' ? ' class="active"'}}><a href="{{base}}/">Home</a></li>
+                        {% if context.hasML %}
+                            <li{{page == 'themes' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
+                            <li{{page == 'allocatestudents' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
+                            <li{{page == 'allocateleaders' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
+                        {% endif %}
+                        {% if context.hasStudent %}
+                            <li{{page == 'themes' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
+                            <li{{page == 'allocatestudents' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
+                            <li{{page == 'allocateleaders' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
+                        {% endif %}
                         {% if context.hasadmin %}
-                            <li{{page == 'home' ? ' class="active"'}}><a href="{{base}}/">Home</a></li>
                             <li{{page == 'about' ? ' class="active"'}}><a href="{{base}}/about">About</a></li>
                             <li{{page == 'contact' ? ' class="active"'}}><a href="{{base}}/contact">Contact</a></li>
                             <li class="dropdown">

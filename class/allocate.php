@@ -114,7 +114,11 @@
             $themes = $themeController->getAllThemes();
             foreach($themes as $theme)
             {
-                $theme->email = $userController->getByID($theme->leader_id)->email;
+                if($theme->leader_id == NULL){
+                    $theme->email = "no leader";
+                }else{
+                    $theme->email = $userController->getByID($theme->leader_id)->email;
+                }
             }
             $context->local()->addval('themeLeaders', $themeLeaders);
             $context->local()->addval('themes', $themes);
