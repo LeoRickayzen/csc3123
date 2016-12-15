@@ -124,12 +124,11 @@
             }
         }
 /**
+* Create and return the view that allows module leaders to assign theme leaders
 *
+* @param    $context    The context variable
 *
-*
-*
-*
-*
+* @return   string  The template which handles allocating a theme leader to a theme
 */
         public function getModuleLeaders($context)
         {
@@ -150,10 +149,15 @@
             $context->local()->addval('themes', $themes);
             return 'moduleLeaderViews/themeLeaderAllocation.twig';
         }
-
+/**
+* allocate a theme leader to a theme
+*
+* @param    $context    The context variable
+*
+* @return   string  The error template if an error is returned
+*/
         public function postModuleLeaders($context)
         {
-            Debugger::write('called');
             $userController = new UserController();
             if($context->formdata()->haspost('userid') && $context->formdata()->haspost('themeid')){
                 $userid = $context->formdata()->mustpost('userid');
@@ -168,7 +172,13 @@
                 return 'error/form.twig';
             }
         }
-
+/**
+* get all the allocations
+*
+* @param    $context    The context variable
+*
+* @return   object  The object containing all the users
+*/        
         public function getAllocations($context)
         {
             $userController = new UserController();
