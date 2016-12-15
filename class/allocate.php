@@ -58,6 +58,7 @@
             {
                 return $this->postSupervisorAllocation($context);
             }
+            return 'error/404.twig';
         }
 
         public function getAllocateSupervisors($context, $themename)
@@ -101,7 +102,7 @@
             }
             else
             {
-                return 'error/404.twig';
+                return 'error/form.twig';
             }
         }
 
@@ -139,7 +140,7 @@
                 }
                 return $this->getModuleLeaders($context);
             }else{
-                return 'error/403.twig';
+                return 'error/form.twig';
             }
         }
 

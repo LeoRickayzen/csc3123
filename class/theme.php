@@ -38,7 +38,7 @@
             {
                 return $this->getTheme($context);
             }
-            //return 'error/404.twig';
+            return 'error/404.twig';
         }
 
         public function getThemes($context)
@@ -63,6 +63,7 @@
             {
                 return 'supervisorViews/themes.twig';
             }
+            return 'error/403.twig';
         }
 
         public function getTheme($context)
@@ -126,6 +127,8 @@
             {      
                 $name = $fdt->mustpost('name');
                 $leader = $fdt->mustpost('TLid');
+            }else{
+                return 'error/form.twig';
             }
             $topicController->newTheme($name, $leader);
             $context->divert('/theme', FALSE, '', FALSE);

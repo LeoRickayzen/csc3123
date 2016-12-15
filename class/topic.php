@@ -35,6 +35,7 @@
             if($topicSpecificRoute->isEqual($context->rest(), $_SERVER)){
                 $topic = substr($path, 7, sizeof($path));
             }
+            return 'error/404.twig';
         }
 
         public function postTopic($context)
@@ -59,7 +60,7 @@
                         }
                         else
                         {    
-                            //return 'error/404.twig';
+                            return 'error/form.twig';
                         }
                     }
                     $themeid = $fdt->mustpost('theme');
@@ -75,7 +76,7 @@
                     $topicObj = $topicController->getTopicById($topic);
                     if($topicObj == null)
                     {
-                        //return 'error/404.twig';
+                        return 'error/form.twig';
                     }
                     $choiceNo = $_POST[$topic];
                     $context->user()->userChoose($topicObj, $choiceNo);

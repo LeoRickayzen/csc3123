@@ -10,11 +10,14 @@
     <section>
         <form action = "{{base}}/allocate/topic" method = "post">
             <div class = "well">
-                <span class = "col-md-2"><strong>student id</strong></span>
-                <span class = "col-md-4"><strong>email address</strong></span>
+                <div class = "row">
+                    <span class = "col-md-2"><strong>student id</strong></span>
+                    <span class = "col-md-4"><strong>email address</strong></span>
+                    <span class = "col-md-4"><strong>choice</strong></span>
+                </div>
                 {% for student in students %}
                     <br>
-                    <p class = "row">
+                    <div class = "row">
                         <span class = "col-md-2">{{student.id}}</span>
                         <span class = "col-md-4">{{student.email}}</span>
                         <div class="form-group col-md-4">
@@ -26,12 +29,10 @@
                             {% endfor %}
                             </select>
                         </div>
-                    </p>
+                    </div>
                 {% endfor %}
             </div>
-            <div class = "well">
-                <button class = "btn btn-primary" type="submit" value = "Submit">Submit selections</button>
-            </div> 
+            <button class = "btn btn-primary pull-right" type="submit" value = "Submit">Submit selections</button>
         </form>
     </section>
 {% endblock main %}
