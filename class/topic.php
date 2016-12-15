@@ -11,17 +11,12 @@
     class Topic extends Siteaction
     {
 /**
- * Handle home operations /
+ * Handle all url paths to this route
  *
  * @param object	$context	The context object for the site
  *
  * @return string	A template name
  */
-        /**
-         *
-         *
-         *
-         */
         public function handle($context)
         {
             $rest = $context->rest();
@@ -37,7 +32,13 @@
             }
             return 'error/404.twig';
         }
-
+/**
+* Create a new topic via a post form, redirect the page back to the themes index
+*
+* @param object     $context    The context object for the site
+*
+* @return none
+*/
         public function postTopic($context)
         {            
             $topicController = new TopicController();            

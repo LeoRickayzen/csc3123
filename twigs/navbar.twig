@@ -13,9 +13,9 @@
                 <ul class="nav navbar-nav">
                         <li{{page == 'home' ? ' class="active"'}}><a href="{{base}}/">Home</a></li>
                         {% if context.hasML %}
-                            <li{{page == 'themes' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
-                            <li{{page == 'allocate/all' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
-                            <li{{page == 'allocate/moduleleader' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
+                            <li{{page == 'theme' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
+                            <li{{page == 'all' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
+                            <li{{page == 'moduleleader' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
                         {% endif %}
                         {% if context.hasSupervisor %}
                             <li{{page == 'theme' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>

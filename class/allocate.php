@@ -3,7 +3,6 @@
  * A class that contains code to implement a contact page
  *
  * @author Leo Rickayzen <l.rickayzen1@newcastle.ac.uk>
- * @copyright 2012-2016 Newcastle University
  *
  */
     class Allocate extends Siteaction
@@ -60,7 +59,14 @@
             }
             return 'error/404.twig';
         }
-
+/**
+* Get the page where the supervisors can be allocate to individual students
+*
+* @param    $context    The context site variable
+* @param    $themename  The themename for which supervisors are being allocated for
+*
+* @return   string  the allocation view
+*/
         public function getAllocateSupervisors($context, $themename)
         {
             if($context->hasTL() && $context->user()->hasTheme($themename, $context->user()->id))
@@ -76,7 +82,13 @@
             }
             return 'themeLeaderViews/allocation.twig';
         }
-
+/**
+* Allocate a supervisor to a student via a post form, divert back to the theme view
+*
+* @param    $context    The context variable
+* 
+* @return   none
+*/
         public function postSupervisorAllocation($context)
         {
             $userids = array_keys($_POST);
@@ -87,7 +99,13 @@
             }
             $context->divert('/theme', FALSE, '', FALSE);
         }
-
+/**
+* Allocate a topic to a student, divert back to all or an error page once submitted 
+* 
+* @param    $context    The context variable
+*
+* @return   string  return the error page if the form data is incomplete
+*/
         public function allocateTopic($context)
         {
             $fdt = $context->formdata();
@@ -98,14 +116,21 @@
                 $studentid = $formins[1];
                 $userController = new UserController();
                 $userController->allocateTopic($studentid, $topicid);
-                $context->divert('/home', FALSE, '', FALSE);
+                $context->divert('/allocate/all', FALSE, '', FALSE);
             }
             else
             {
                 return 'error/form.twig';
             }
         }
-
+/**
+*
+*
+*
+*
+*
+*
+*/
         public function getModuleLeaders($context)
         {
             $userController = new UserController();

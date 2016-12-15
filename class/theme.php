@@ -3,7 +3,6 @@
  * A class that contains code to handle any requests for the student choices page
  *
  * @author Leo Rickayzen <l.rickayzen1@ncl.ac.uk>
- * @copyright 2012-2013 Newcastle University
  *
  */
 /**
@@ -12,13 +11,12 @@
     class Theme extends Siteaction
     {
 /**
- * Handle home operations /
+ * Handle hall routes throug the rought object
  *
  * @param object	$context	The context object for the site
  *
  * @return string	A template name
  */
-
         public function handle($context)
         {
             $rest = $context->rest();
@@ -40,7 +38,13 @@
             }
             return 'error/404.twig';
         }
-
+/**
+* Get the all the themes and return a twig view of them all
+* 
+* @param object     $context    The context object for the site
+*
+* @return string template name
+*/
         public function getThemes($context)
         {
             $themeController = new ThemeController();
@@ -66,6 +70,13 @@
             return 'error/403.twig';
         }
 
+/**
+* get a specific theme through a rest route theme/{themename}
+* 
+* @param object     $context    The context object for the site
+*
+* @return string template name
+*/
         public function getTheme($context)
         {
             $themeController = new ThemeController();
@@ -118,7 +129,13 @@
                 return 'error/403.twig';
             }
         }
-
+/**
+* Create a new theme
+*
+* @param object     $context    The context object for this site
+*
+* @return none
+*/
         public function postTheme($context)
         {
             $topicController = new TopicController();
