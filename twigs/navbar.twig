@@ -7,20 +7,24 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{base}}/">{{fwurls.sitename}}</a>
+                <a class="navbar-brand" href="{{base}}/">Project portal</a>
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
                         <li{{page == 'home' ? ' class="active"'}}><a href="{{base}}/">Home</a></li>
                         {% if context.hasML %}
                             <li{{page == 'themes' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
-                            <li{{page == 'allocatestudents' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
-                            <li{{page == 'allocateleaders' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
+                            <li{{page == 'allocate/all' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
+                            <li{{page == 'allocate/moduleleader' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
+                        {% endif %}
+                        {% if context.hasSupervisor %}
+                            <li{{page == 'theme' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
+                        {% endif %}
+                        {% if context.hasTL %}
+                            <li{{page == 'theme' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
                         {% endif %}
                         {% if context.hasStudent %}
-                            <li{{page == 'themes' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
-                            <li{{page == 'allocatestudents' ? ' class="active"'}}><a href="{{base}}/allocate/all">Allocate Students</a></li>
-                            <li{{page == 'allocateleaders' ? ' class="active"'}}><a href="{{base}}/allocate/moduleleader">Allocate Module Leaders</a></li>
+                            <li{{page == 'theme' ? ' class="active"'}}><a href="{{base}}/theme">Themes</a></li>
                         {% endif %}
                         {% if context.hasadmin %}
                             <li{{page == 'about' ? ' class="active"'}}><a href="{{base}}/about">About</a></li>
@@ -64,12 +68,6 @@
                             </li>
                     </ul>
                 {% endif %}
-                <form class="navbar-form navbar-right">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </form>
             </div>
         </div>
     </div>

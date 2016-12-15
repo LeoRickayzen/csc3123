@@ -38,6 +38,7 @@
             {
                 return $this->getTheme($context);
             }
+            //return 'error/404.twig';
         }
 
         public function getThemes($context)

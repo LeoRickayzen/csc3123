@@ -24,9 +24,10 @@
 		public function isEqual($rest, $requests)
 		{
 			$path = $this->routeBuilder($rest);
+			Debugger::write($this->path . ' ' . $path);
 			if($this->withVariable)
 			{
-				if($this->requestType($requests) === $this->requestType && substr($path, 0, $this->length) === $this->path)
+				if($this->requestType($requests) === $this->requestType)
 				{
                 	return TRUE;
             	}
