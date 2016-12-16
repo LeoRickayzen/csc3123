@@ -13,14 +13,12 @@
                 <div class = "well">
                     <h2>{{theme.name}}</h2>
                     <a href = "{{base}}/theme/{{theme.name}}"><button type="submit" class="btn btn-primary">Explore</button></a>
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-primary">Submit edit</button>
                 </div>
             {% endfor %}
             <div class = "well">
                 <form action="{{base}}/theme" method="post">
                     <input type="text" class="form-control" name = "name" placeholder="theme name">
-                    <input type="text" class="form-control" name = "TLid" placeholder="themeleader id">
+                    <input type="text" class="form-control" name = "TLemail" placeholder="themeleader email">
                     <button type="submit" class="btn btn-primary">add theme</button>
                 </form>
             </div>

@@ -23,12 +23,18 @@
             $path = Route::routeBuilder($rest);
             $topicPostRoute = new Route('', 'POST');           
             $topicSpecificRoute = new Route('/', 'GET');
-            if($topicPostRoute->isEqual($context->rest(), $_SERVER))
+            $topicEditRoute = new Route('edit', 'POST');
+            if ($topicPostRoute->isEqual($context->rest(), $_SERVER))
             {                
                 return $this->postTopic($context);           
             }            
-            if($topicSpecificRoute->isEqual($context->rest(), $_SERVER)){
+            if ($topicSpecificRoute->isEqual($context->rest(), $_SERVER))
+            {
                 $topic = substr($path, 7, sizeof($path));
+            }
+            if ($topicEditRoute->isEqual($context->rest(), $_SERVER))
+            {
+                return $this->editTopic($context);
             }
             return 'error/404.twig';
         }
@@ -37,45 +43,30 @@
 *
 * @param object     $context    The context object for the site
 *
-* @return none
+* @return void
 */
         public function postTopic($context)
         {            
             $topicController = new TopicController();            
-            if($context->hasTL() || $context->hasSupervisor() || $context->hasAdmin() || $context->hasML())
+            if ($context->hasTL() || $context->hasSupervisor() || $context->hasAdmin() || $context->hasML())
             {
                 $fdt = $context->formdata();
-                if($fdt->haspost('title') && $fdt->haspost('description'))
+                if ($fdt->haspost('title') && $fdt->haspost('description'))
                 {
                     $title = $fdt->mustpost('title');
                     $description = $fdt->mustpost('description');
-                    if($context->hasSupervisor())
-                    {    
-                        $supervisorid = $context->user()->getId();
-                    }
-                    else
-                    {  
-                        if($fdt->haspost('supervisorid'))
-                        { 
-                            $supervisorid = $fdt->mustpost('supervisorid');
-                        }
-                        else
-                        {    
-                            return 'error/form.twig';
-                        }
-                    }
                     $themeid = $fdt->mustpost('theme');
-                    $topicController->newTopic($title, $description, $supervisorid, $themeid);
+                    $topicController->newTopic($title, $description, $themeid);
                 }
             }
             if($context->hasStudent())
             {
                 $fdt = $context->formdata();
                 $topics = array_keys($_POST);
-                foreach($topics as $topic)
+                foreach ($topics as $topic)
                 {
                     $topicObj = $topicController->getTopicById($topic);
-                    if($topicObj == null)
+                    if ($topicObj == null)
                     {
                         return 'error/form.twig';
                     }
@@ -84,6 +75,35 @@
                 }
             }
             $context->divert('/theme', FALSE, '', FALSE);
+        }
+
+/**
+* edit a topic
+*
+* @param object     $context    The context object for this site
+*
+* @return void
+*/
+        public function editTopic($context)
+        {
+            $fdt = $context->formdata();
+            if($context->hasML())
+            {
+                if ($fdt->haspost('topicid') && $fdt->haspost('topicdesc'))
+                {
+                    $topicid = $fdt->mustpost('topicid');
+                    $topicdesc = $fdt->mustpost('topicdesc');
+                    $topicController = new TopicController();
+                    $topicController->editTopic($topicid, $topicdesc);
+                    $context->divert('/theme', FALSE, '', FALSE);
+                }
+                else
+                {
+                    return 'error/form.twig';
+                }
+            }else{
+                return 'error/403.twig';
+            }
         }
 
     }

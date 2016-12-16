@@ -27,24 +27,26 @@
         public function handle($context)
         {
         	$user = $context->user();
-        	if($user != NULL){
-        		if($user->isstudent())
+        	if ($user != NULL){
+        		if ($user->isstudent())
 	        	{
                     $context->local()->addval('topicChoices', $context->user()->userChoices());
 	        		return 'studentViews/studentIndex.twig';
 	        	}
-	        	if($user->isTL())
+	        	if ($user->isTL())
 	        	{
 	        		return 'themeLeaderViews/index.twig';
 	        	}
-	        	if($user->isdeveloper() || $user->isadmin())
+	        	if ($user->isdeveloper() || $user->isadmin())
 	        	{
 	        		return 'index.twig';
 	        	}
-                if($user->isModuleLeader()){
+                if ($user->isModuleLeader())
+                {
                     return 'moduleLeaderViews/index.twig';
                 }
-                if($user->isSupervisor()){
+                if ($user->isSupervisor())
+                {
                     return 'supervisorViews/index.twig';
                 }
         	}

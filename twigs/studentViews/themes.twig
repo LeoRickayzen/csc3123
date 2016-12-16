@@ -14,18 +14,8 @@
                 <div class = "well">
                     <h2>{{theme.name}}</h2>
                     <a href = "{{base}}/theme/{{theme.name}}"><button type="button" class="btn btn-primary">Explore</button></a>
-                    <div class="form-group col-md-2">
-                        <select class="form-control" name = "{{theme.id}}">
-                            {% for i in 1..10 %}
-                                <option value = "{{i-1}}">choice {{i}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
                 </div>
             {% endfor %}
-            <div class = "well">
-                <button class = "btn btn-primary" type="submit" value = "Submit">Submit selections</button>
-            </div>
         </form>
     </div>
     <div class = "well col-md-4">

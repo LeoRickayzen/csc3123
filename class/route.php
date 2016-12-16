@@ -28,7 +28,7 @@
 		{
 			$this->path = $path;
 			$this->requestType = $requestType;
-			if(substr($path, -1) === '/')
+			if (substr($path, -1) === '/')
 			{
 				$this->withVariable = true;
 			}
@@ -50,9 +50,9 @@
 		{
 			$path = $this->routeBuilder($rest);
 			Debugger::write($this->path . ' ' . $path);
-			if($this->withVariable)
+			if ($this->withVariable)
 			{
-				if($this->requestType($requests) === $this->requestType)
+				if ($this->requestType($requests) === $this->requestType)
 				{
                 	return TRUE;
             	}
@@ -63,7 +63,7 @@
 			}
 			else
 			{
-				if($this->requestType($requests) === $this->requestType && $path === $this->path)
+				if ($this->requestType($requests) === $this->requestType && $path === $this->path)
 				{
                 	return TRUE;
             	}
@@ -83,8 +83,8 @@
 		private function requestType($requests){
             $methods = array('GET', 'PUT', 'POST', 'DELETE');
 
-            for($i = 0; $i < sizeof($methods); $i++){
-                if($requests['REQUEST_METHOD'] === $methods[$i]){
+            for ($i = 0; $i < sizeof($methods); $i++){
+                if ($requests['REQUEST_METHOD'] === $methods[$i]){
                     return $methods[$i];
                 }
             }
@@ -99,9 +99,9 @@
         public static function routeBuilder($rest)
         {
             $path = "";
-            for($i = 0; $i < sizeof($rest); $i = $i + 1)
+            for ($i = 0; $i < sizeof($rest); $i = $i + 1)
             {
-                if($i == sizeof($rest)-1)
+                if ($i == sizeof($rest)-1)
                 {
                     $path = $path . $rest[$i];
                 }

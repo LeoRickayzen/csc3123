@@ -33,7 +33,7 @@
 		{
             $topicIDs = R::findAll('theme_topic', 'theme_id = "' . $themeid . '"');
             $topics = [];
-            foreach($topicIDs as $topicID)
+            foreach ($topicIDs as $topicID)
             {
                 $topic = R::findOne('topic', 'id = "' . $topicID->topic_id . '"');
                 $topics[] = $topic;
@@ -49,17 +49,32 @@
 * @param 	$themeid 		the value of the theme id that the topic belongs to
 *
 */
-		public function newTopic($title, $description, $supervisorid, $themeid)
+		public function newTopic($title, $description, $themeid)
 		{
 			$topic = R::dispense('topic');
 			$topic->title = $title;
 			$topic->description = $description;
-			$topic->supervisor = R::findOne('user', 'id = "' . $supervisorid . '"');
 			$theme = R::findOne("theme", "id = '" . $themeid . "'");	
 			$theme->sharedTopic[] = $topic;
             $topic->sharedTheme[] = $theme;
             R::store($theme);
             R::store($topic);
+		}
+/**
+* edit a topic
+*
+* @param 	$topicid	the id of the theme
+* @param 	$topicdescription 	the description of the theme
+*
+* @return 	void
+*/
+		public function editTopic($topicid, $topicdescription)
+		{
+			$topic = R::findOne('topic', 'id = "' . $topicid . '"');
+			if($topic != null){
+				$topic->description = $topicdescription;
+				R::store($topic);
+			}
 		}
 	}
 ?>

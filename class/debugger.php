@@ -10,7 +10,7 @@
 		*
 		* @param 	$string 	a string to write to the text file
 		*
-		* @return 	none
+		* @return 	void
 		*/
 		public static function write($string){
 			$file = fopen("debugger.txt", "w" );

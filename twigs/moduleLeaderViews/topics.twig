@@ -13,14 +13,16 @@
                 <div class = "well">
                     <h2>{{topic.title}}</h2>
                     <p>{{topic.description}}</p>
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-primary">Submit edit</button>
+                    <form action="{{base}}/topic/edit" method = "post">
+                        <input type="hidden" name = "topicid" value = "{{topic.id}}">
+                        <textarea class="form-control" rows="5" placeholder ="description of the topic" name = "topicdesc"></textarea>
+                        <button type="submit" class="btn btn-primary">Submit edit</button>
+                    </form>
                 </div>
             {% endfor %}
             <div class = "well">
                 <form action="{{base}}/topic" method = "post">
                     <input type="text" class="form-control" name = "title" placeholder="topic name">
-                    <input type="text" class="form-control" name = "supervisorid" placeholder="supervisor id">
                     <textarea class="form-control" rows="5" placeholder ="description of the topic" name = "description"></textarea>
                     <button type="submit" class="btn btn-primary" name = "theme" value = "{{theme}}">add topic</button>
                 </form>

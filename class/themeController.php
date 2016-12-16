@@ -33,17 +33,24 @@
 * @param 	$name 	the name of the new theme
 * @param 	$leaderid 	the id of the theme leader
 *
-* @return 	none
+* @return 	void
 */
-		public function newTheme($name, $leaderid)
+		public function newTheme($name, $leaderemail)
 		{
-			$leader = R::findOne('user', 'id = "' . $leaderid . '"');
+			$leader = R::findOne('user', 'email = "' . $leaderemail . '"');
+			
 			$theme = R::dispense('theme');
             $theme->name = $name;
-            $theme->sharedLeader = $leader;
-            $leader->sharedTheme = $theme;
+            $theme->leader_id = $leader;
+            
+            $title = 'generic ' . $theme->name;
+            $description = 'any project within this theme';
+
             R::store($theme);
             R::store($leader);
+
+            $topicController = new TopicController();
+            $topicController->newTopic($title, $description, $theme->id);
 		}
 	}
 ?>

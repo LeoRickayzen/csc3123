@@ -52,7 +52,7 @@
             $nameid = R::findOne('rolename', 'name = "' . $role . '"');
             $userids = R::findAll('role', 'rolename_id = "' . $nameid->id . '" && rolecontext_id = "2"');
             $users = [];
-            foreach($userids as $userid)
+            foreach ($userids as $userid)
             {
                 $user = R::findOne('user', 'id = "' . $userid->user_id . '"');
                 $users[] = $user;
@@ -70,11 +70,13 @@
         public function assignLeader($userid, $themeid)
         {
             $user = R::findOne('user', 'id = "' . $userid . '"');
-            if($user->isTL() || $user == NULL){
+            if ($user->isTL() || $user == NULL){
                 $theme = R::findOne('theme', 'id = "' . $themeid . '"');
                 $theme->leader_id = $user->id;
                 R::store($theme);
-            }else{
+            }
+            else
+            {
                 return false;
             }
         }
@@ -83,7 +85,7 @@
 *
 * @param    $themeid    the id of the theme for which the themeleader is being removed
 *
-* @return   none    Doesn't return a value      
+* @return   void    
 */
         public function revokeLeader($themeid)
         {
@@ -103,15 +105,15 @@
 			$theme = R::findOne('theme', 'name = "' . $themename . '"');
             $topicThemes = R::findAll('theme_topic', 'theme_id = "' . $theme->id . '"');
             $topics = [];
-            foreach($topicThemes as $topicTheme){          
+            foreach ($topicThemes as $topicTheme){          
                 $topics[] = R::findOne('topic', 'id = "' . $topicTheme->topic_id . '"'); 
             }                   
             $students = [];
-            foreach($topics as $topic)
+            foreach ($topics as $topic)
             {
                 Debugger::write(json_encode($topic));
                 $user = R::findOne('user', 'allocated_topic = "' . $topic->id . '"');
-                if($user != null)
+                if ($user != null)
                 {
                     $students[] = $user;
                 }
@@ -124,12 +126,16 @@
 * @param    $userid           the id of the user being allocated a supervisor
 * @param    $supervisorid     the id of the supervisor being allocated to a student
 *
-* @return   none
+* @return   void
 */
         public function allocateSupervisor($userid, $supervisorid)
         {
             $user = R::findOne('user', 'id = "' . $userid . '"');
             $user->allocateSupervisor($supervisorid);
+            $supervisor = R::findOne('user', 'id = "' . $supervisorid . '"');
+            $destination = $supervisor->email;
+            mail($destination, 'your student', 'the student you have been allocated to supervise email address is ' . $user->email . '.');
+            mail($user->email, 'your supervisor', 'you have been allocated a supervisor! Their email address is ' . $destination . '.');
         }
 /**
 * allocate a topic to a student
@@ -137,13 +143,15 @@
 * @param    $studentid     The id of the student being allocated a topic
 * @param    $topicid       The id of the topic being allocated to the student
 *
-* @return   none
+* @return   void
 */
         public function allocateTopic($studentid, $topicid)
         {
             $student = R::findOne('user', 'id = "' . $studentid . '"');
             $topic = R::findOne('topic', 'id = "' . $topicid . '"');
             $student->allocateTopic($topic);
+            $destination = $student->email;
+            mail($student->email, 'your project', 'You have been allocated a project! the project you have been allocated is' . $topic->title . '.');
         }
 /**
 * get all the students 
@@ -156,7 +164,7 @@
         {
             $studentRoles = R::findAll('role', 'rolename_id = "3"');
             $students = [];        
-            foreach($studentRoles as $studentRole)
+            foreach ($studentRoles as $studentRole)
             {
                 $id = $studentRole->user_id;   
                 $student = R::findOne('user', 'id = "' . $id . '"');                
@@ -175,7 +183,7 @@
         {
             $students = $this->getAllStudents();            
             $studentsWA = [];
-            foreach($students as $student)
+            foreach ($students as $student)
             {               
                 $student->ownChoices = $student->getStudentChoices();                
                 $studentsWA[] = $student;

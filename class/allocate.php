@@ -14,7 +14,6 @@
  *
  * @return string	A template name
  */
-
         public function handle($context)
         {
             $getAllocation = new Route('all', 'GET');
@@ -25,39 +24,34 @@
             $allocateModuleLeaderPost = new Route('moduleleader', 'POST');
             $rest = $context->rest();
             $path = Route::routeBuilder($rest);            
-
-            if($getAllocation->isEqual($rest, $_SERVER))
+            if ($getAllocation->isEqual($rest, $_SERVER))
             {
                 $context->local()->addval('students', $this->getAllocations($context));
                 return 'moduleLeaderViews/allocator.twig';
-            }
-            
-            if($allocateTopic->isEqual($rest, $_SERVER))
+            }            
+            if ($allocateTopic->isEqual($rest, $_SERVER))
             {
                 $this->allocateTopic($context);
+            }            
+            if ($allocateModuleLeaderGet->isEqual($rest, $_SERVER))
+            {
+                Debugger::write('fdsfdsfdsfdsfdsfds');
+                return $this->getModuleLeaders($context);
             }
-            
-            if($allocateSupervisorsGet->isEqual($rest, $_SERVER))
+            if ($allocateSupervisorsGet->isEqual($rest, $_SERVER))
             {
                 $theme = substr($path, 12, strlen($path));
                 return $this->getAllocateSupervisors($context, $theme);
             }
-
-            if($allocateModuleLeaderGet->isEqual($rest, $_SERVER))
-            {
-                return $this->getModuleLeaders($context);
-            }
-
-            if($allocateModuleLeaderPost->isEqual($rest, $_SERVER))
+            if ($allocateModuleLeaderPost->isEqual($rest, $_SERVER))
             {
                 return $this->postModuleLeaders($context);
-            }
-            
-            if($allocateSupervisorsPost->isEqual($rest, $_SERVER))
+            }          
+            if ($allocateSupervisorsPost->isEqual($rest, $_SERVER))
             {
                 return $this->postSupervisorAllocation($context);
             }
-            return 'error/404.twig';
+            return 'error/test3.twig';
         }
 /**
 * Get the page where the supervisors can be allocate to individual students
@@ -69,9 +63,8 @@
 */
         public function getAllocateSupervisors($context, $themename)
         {
-            if($context->hasTL() && $context->user()->hasTheme($themename, $context->user()->id))
+            if ($context->hasTL() && $context->user()->hasTheme($themename, $context->user()->id))
             {
-
                 $userController = new UserController();                
                 $context->local()->addval('students', $userController->getStudentsByTheme($themename));
                 $context->local()->addval('supervisors', $userController->getAllSupervisors());
@@ -87,13 +80,13 @@
 *
 * @param    $context    The context variable
 * 
-* @return   none
+* @return   void
 */
         public function postSupervisorAllocation($context)
         {
             $userids = array_keys($_POST);
             $userController = new UserController();            
-            foreach($userids as $userid)
+            foreach ($userids as $userid)
             {
                 $userController->allocateSupervisor($userid, $_POST[$userid]);
             }
@@ -109,7 +102,7 @@
         public function allocateTopic($context)
         {
             $fdt = $context->formdata();
-            if($fdt->haspost('topicStudent'))
+            if ($fdt->haspost('topicStudent'))
             {
                 $formins = explode(',', $fdt->mustpost('topicStudent'));
                 $topicid = $formins[0]; 
@@ -137,11 +130,13 @@
             $themeLeaders = $userController->getAllTL();
             $supervisors = $userController->getAllSupervisors();
             $themes = $themeController->getAllThemes();
-            foreach($themes as $theme)
+            foreach ($themes as $theme)
             {
-                if($theme->leader_id == NULL){
+                if ($theme->leader_id == NULL){
                     $theme->email = "no leader";
-                }else{
+                }
+                else
+                {
                     $theme->email = $userController->getByID($theme->leader_id)->email;
                 }
             }
@@ -159,16 +154,20 @@
         public function postModuleLeaders($context)
         {
             $userController = new UserController();
-            if($context->formdata()->haspost('userid') && $context->formdata()->haspost('themeid')){
+            if ($context->formdata()->haspost('userid') && $context->formdata()->haspost('themeid')){
                 $userid = $context->formdata()->mustpost('userid');
                 $themeid = $context->formdata()->mustpost('themeid');
-                if($userid === 'none'){
+                if ($userid === 'none'){
                     $userController->revokeLeader($themeid);
-                }else{
+                }
+                else
+                {
                     $userController->assignLeader($userid, $themeid);
                 }
                 return $this->getModuleLeaders($context);
-            }else{
+            }
+            else
+            {
                 return 'error/form.twig';
             }
         }

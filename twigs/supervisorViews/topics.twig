@@ -12,13 +12,14 @@
             <div class = "well">
                 <h2>{{topic.title}}</h2>
                 <p>{{topic.description}}</p>
-                <div class="dropdown">
-                    <a href="{{base}}/edit/topic/{{topic.id}}"><button type="button" class="btn btn-primary">Edit theme</button></a>
-                </div>
             </div>
         {% endfor %}
-        <div class = "well text-right">
-            <a href="{{base}}/edit/topic/{{topic.id}}"><button type="button" class="btn btn-primary">Add theme</button></a>
+        <div class = "well">
+            <form action="{{base}}/topic" method = "post">
+                <input type="text" class="form-control" name = "title" placeholder="topic name">
+                <textarea class="form-control" rows="5" placeholder ="description of the topic" name = "description"></textarea>
+                <button type="submit" class="btn btn-primary" name = "theme" value = "{{theme}}">add topic</button>
+            </form>
         </div>
     </section>
 {% endblock main %}

@@ -24,15 +24,16 @@
             $themeRoute = new Route('', 'GET');
             $themePostRoute = new Route('', 'POST');
             $themeSpecificRoute = new Route('/', 'GET');
-            if($themeRoute->isEqual($context->rest(), $_SERVER))
+            $editTheme = new Route('edit', 'POST');
+            if ($themeRoute->isEqual($context->rest(), $_SERVER))
             {
                 return $this->getThemes($context);
             }
-            if($themePostRoute->isEqual($context->rest(), $_SERVER))
+            if ($themePostRoute->isEqual($context->rest(), $_SERVER))
             {
                 $this->postTheme($context);
             }
-            if($themeSpecificRoute->isEqual($context->rest(), $_SERVER))
+            if ($themeSpecificRoute->isEqual($context->rest(), $_SERVER))
             {
                 return $this->getTheme($context);
             }
@@ -51,19 +52,19 @@
             $themes = $themeController->getAllThemes();
             $context->local()->addval('themes', $themes);            
             $context->local()->addval('topicChoices', $context->user()->userChoices());            
-            if($context->hasStudent())
+            if ($context->hasStudent())
             {
                 return 'studentViews/themes.twig';
             }
-            if($context->hasML())
+            if ($context->hasML())
             {
                 return 'moduleLeaderViews/themes.twig';
             }
-            if($context->hasTL())
+            if ($context->hasTL())
             {
                 return 'themeLeaderViews/themes.twig';
             }
-            if($context->hasSupervisor())
+            if ($context->hasSupervisor())
             {
                 return 'supervisorViews/themes.twig';
             }
@@ -83,7 +84,7 @@
             $topicController = new TopicController();
             $theme = Route::routeBuilder($context->rest());
             $themeObj = $themeController->getTheme($theme);
-            if($themeObj == null)
+            if ($themeObj == null)
             {
                 return 'error/404.twig';
             }
@@ -91,28 +92,21 @@
             $topics = $topicController->getTopicByTheme($themeObj->id);
             $context->local()->addval('topics', $topics);
             $context->local()->addval('topicChoices', $context->user()->userChoices());
-            if($context->hasStudent())
+            if ($context->hasStudent())
             {   
                 return 'studentViews/topics.twig';
             }
-            if($context->hasML())
+            if ($context->hasML())
             {
                 return 'moduleLeaderViews/topics.twig';
             }
-            if($context->hasSupervisor() || $context->hasTL())
+            if ($context->hasSupervisor() || $context->hasTL())
             {
-                if($context->hasSupervisor())
+                if ($context->hasSupervisor())
                 {
-                    if($context->user()->hasTheme($theme, $context->user()->id))
-                    {
-                        return 'supervisorViews/topics.twig';
-                    }
-                    else
-                    {
-                        return 'supervisorViews/topicsExplore.twig';
-                    }
+                    return 'supervisorViews/topics.twig';
                 }
-                if($context->hasTL())
+                if ($context->hasTL())
                 {
                     if($context->user()->hasTheme($theme, $context->user()->id))
                     {
@@ -134,22 +128,24 @@
 *
 * @param object     $context    The context object for this site
 *
-* @return none
+* @return void
 */
         public function postTheme($context)
         {
-            $topicController = new TopicController();
+            $themeController = new ThemeController();
             $fdt = $context->formdata();            
-            if($fdt->haspost('name') && $fdt->haspost('TLid'))
+            if ($fdt->haspost('name') && $fdt->haspost('TLemail'))
             {      
                 $name = $fdt->mustpost('name');
-                $leader = $fdt->mustpost('TLid');
-            }else{
+                $leader = $fdt->mustpost('TLemail');
+            }
+            else
+            {
                 return 'error/form.twig';
             }
-            $topicController->newTheme($name, $leader);
-            $context->divert('/theme', FALSE, '', FALSE);
+            $themeController->newTheme($name, $leader);
+            Debugger::write('130');
+            $context->divert('/home', FALSE, '', FALSE);
         }
-
     }
 ?>

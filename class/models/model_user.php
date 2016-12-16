@@ -198,7 +198,7 @@
             $id = $this->bean->id;
             $topics = R::find('userchoice_topic', "user_id = '" . $id . "'");
             $topicObjs = [null, null, null, null, null, null, null, null, null, null];
-            foreach($topics as $topic)
+            foreach ($topics as $topic)
             {
                 $topicObj = R::findOne('topic', "id = '" . $topic->topicId . "'");
                 $topicObj->choiceNumber = $topic->choiceNum;
@@ -206,11 +206,16 @@
             }
             return $topicObjs;
         }
-
+/**
+* Is the user theme leader to this theme?
+*
+* @param    $themeName  string value of the theme name
+* @param    $uid    The users id
+*/
         public function hasTheme($themeName, $uid)
         {
             $theme = R::findOne('theme', 'name = "' . $themeName . '"');
-            if($theme->leader_id == $uid)
+            if ($theme->leader_id == $uid)
             {
                 return true;
             }
@@ -230,7 +235,7 @@
             $relationByChoice = R::findOne('userchoice_topic', 'topic_id = "' . $topic->id . '" AND user_id = "' . $user->id . '"');
             $relationByChoiceNum = R::findOne('userchoice_topic', 'choice_num = "' . $choiceNum . '"');
             //if the student hasn't already chosen that topic or allocated that choice number
-            if($relationByChoice == NULL && $relationByChoiceNum == NULL)
+            if ($relationByChoice == NULL && $relationByChoiceNum == NULL)
             {
                 $user->link('userchoice_topic', array('choiceNum'=>$choiceNum))->topic = $topic;
                 $id = R::store($user);
@@ -238,7 +243,7 @@
             else
             {
                 //if the student hasn't already allocated that choice number, but has already chosen that topic
-                if($relationByChoiceNum == NULL)
+                if ($relationByChoiceNum == NULL)
                 {
                     //reallocate the choicen number
                     $relationByChoice->choiceNum = $choiceNum;
@@ -253,31 +258,47 @@
                 }
             }
         }
-
+/**
+* Allocate a supervisor to this user
+*
+* @param    $supervisorId   the id of the supervisor to be allocated to the user
+*
+* @return   void
+*/
         public function allocateSupervisor($supervisorId)
         {
             $user = $this->bean;
             $user->supervisor = $supervisorId;
             R::store($user);
         }
-
+/**
+* Allocate a user a topic
+*
+* @param    $topic  a topic object to be allocated to the user
+*
+* @return   void
+*/
         public function allocateTopic($topic)
         {
             $user = $this->bean;
             $user->allocatedTopic = $topic->id;
             R::store($user);
         }
-
+/**
+* Get the choices for this user
+*
+* @return   Object  all the choices for the given user
+*/
         public function getStudentChoices()
         {
             $choicesids = R::findAll('userchoice_topic', 'user_id = "' . $this->bean->id . '"');
             $choices = [];
-            for($i = 0; $i < 10; $i++)
+            for ($i = 0; $i < 10; $i++)
             {
                 $choices[$i] = 'no preference';
             }
 
-            foreach($choicesids as $choice)
+            foreach ($choicesids as $choice)
             {
                 $topic = R::findOne('topic', 'id = "' . $choice->topicId . '"');
                 $choiceNumber = $choice->choice_num;
