@@ -35,19 +35,17 @@
 *
 * @return 	void
 */
-		public function newTheme($name, $leaderemail)
+		public function newTheme($name, $leaderid)
 		{
-			$leader = R::findOne('user', 'email = "' . $leaderemail . '"');
 			
 			$theme = R::dispense('theme');
             $theme->name = $name;
-            $theme->leader_id = $leader;
+            $theme->leader_id = $leaderid;
             
             $title = 'generic ' . $theme->name;
             $description = 'any project within this theme';
 
             R::store($theme);
-            R::store($leader);
 
             $topicController = new TopicController();
             $topicController->newTopic($title, $description, $theme->id);

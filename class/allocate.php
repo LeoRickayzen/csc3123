@@ -20,8 +20,8 @@
             $allocateTopic = new Route('topic', 'POST');
             $allocateSupervisorsGet = new Route('supervisors/', 'GET');
             $allocateSupervisorsPost = new Route('supervisors', 'POST');
-            $allocateModuleLeaderGet = new Route('moduleleader', 'GET');
-            $allocateModuleLeaderPost = new Route('moduleleader', 'POST');
+            $allocateModuleLeaderGet = new Route('themeleader', 'GET');
+            $allocateModuleLeaderPost = new Route('themeleader', 'POST');
             $rest = $context->rest();
             $path = Route::routeBuilder($rest);            
             if ($getAllocation->isEqual($rest, $_SERVER))
@@ -35,7 +35,6 @@
             }            
             if ($allocateModuleLeaderGet->isEqual($rest, $_SERVER))
             {
-                Debugger::write('fdsfdsfdsfdsfdsfds');
                 return $this->getModuleLeaders($context);
             }
             if ($allocateSupervisorsGet->isEqual($rest, $_SERVER))
@@ -138,6 +137,7 @@
                 else
                 {
                     $theme->email = $userController->getByID($theme->leader_id)->email;
+                    Debugger::write('y');
                 }
             }
             $context->local()->addval('themeLeaders', $themeLeaders);

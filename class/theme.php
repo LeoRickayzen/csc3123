@@ -134,17 +134,16 @@
         {
             $themeController = new ThemeController();
             $fdt = $context->formdata();            
-            if ($fdt->haspost('name') && $fdt->haspost('TLemail'))
+            if ($fdt->haspost('name') && $fdt->haspost('TLid'))
             {      
                 $name = $fdt->mustpost('name');
-                $leader = $fdt->mustpost('TLemail');
+                $leader = $fdt->mustpost('TLid');
             }
             else
             {
                 return 'error/form.twig';
             }
             $themeController->newTheme($name, $leader);
-            Debugger::write('130');
             $context->divert('/home', FALSE, '', FALSE);
         }
     }

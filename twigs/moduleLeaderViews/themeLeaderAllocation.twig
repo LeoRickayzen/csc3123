@@ -8,7 +8,7 @@
             <span class = "col-md-4 text-center">select a new leader</span></h4></b>
         </div>
         {% for theme in themes %}
-            <form method = "post" action = "{{base}}/allocate/moduleleader">
+            <form method = "post" action = "{{base}}/allocate/themeleader">
                 <div class = "well row">
                     <span class = "col-md-3 text-center">{{theme.email}}</span>
                     <span class = "col-md-2 text-center">{{theme.name}}</span>
